@@ -110,8 +110,6 @@ export default function WorkExperiencesSection() {
             />
             <ChromaticAberration
               offset={new Vector2(0.001, 0.001)}
-              radialModulation={ true }
-              modulationOffset={ 0.1 }
             />
             <Noise
               premultiply
