@@ -10,7 +10,9 @@
   <p>
     My personal portfolio website, built with Next.js, Framer Motion, and Three.js.
   </p>
-  
+  <p>
+    Based on the excellent template by <a href="https://github.com/dhlananhh/my-3d-portfolio">dhlananhh</a>.
+  </p>
 
 <a href="https://lakshp.live/" target="_blank">
       <img
@@ -116,6 +118,7 @@ Before you begin, ensure you have the following tools installed:
     - Add your Web3Forms Access Key for the contact form:
     ```env
     NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=YOUR_WEB3FORMS_ACCESS_KEY_HERE
+    NEXT_PUBLIC_GITHUB_TOKEN=YOUR_GITHUB_TOKEN_HERE
     ```
 
 5.  **Run the development server** (choose one):
