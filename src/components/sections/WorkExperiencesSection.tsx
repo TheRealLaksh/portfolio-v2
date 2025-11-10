@@ -6,6 +6,7 @@ import AnimatedBlobBackground from "@/components/custom-ui/AnimatedBlobBackgroun
 import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
+import { Vector2 } from "three";
 import {
   EffectComposer,
   Bloom,
@@ -108,7 +109,7 @@ export default function WorkExperiencesSection() {
               mipmapBlur={ true }
             />
             <ChromaticAberration
-              offset={ [ 0.001, 0.001 ] }
+              offset={new Vector2(0.001, 0.001)}
               radialModulation={ true }
               modulationOffset={ 0.1 }
             />
