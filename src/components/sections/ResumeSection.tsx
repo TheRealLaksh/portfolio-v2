@@ -1,6 +1,6 @@
 "use client";
 
-
+import * as THREE from 'three';
 import { Download, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/custom-ui/SectionHeading";
@@ -19,8 +19,8 @@ import {
 import { BlendFunction } from "postprocessing";
 
 
-const resumeLink = "/resume/Laksh_Pradhwani_Resume.pdf";
-const resumeFilename = "Laksh_Pradhwani_Resume.pdf";
+const resumeLink = "/resume/My_Resume.pdf"; // Use your actual resume file name
+const resumeFilename = "My_Resume.pdf";   // Use your actual resume file name
 
 
 export default function ResumeSection() {
@@ -112,9 +112,8 @@ export default function ResumeSection() {
               mipmapBlur={ true }
             />
             <ChromaticAberration
-              offset={ [ 0.001, 0.001 ] }
-              radialModulation={ true }
-              modulationOffset={ 0.1 }
+              // --- THIS IS THE FIX ---
+              offset={new THREE.Vector2(0.001, 0.001)} 
             />
             <Noise
               premultiply
