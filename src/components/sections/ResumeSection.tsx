@@ -1,6 +1,6 @@
 "use client";
 
-import * as THREE from 'three';
+import * as THREE from 'three'; // <-- Make sure this import exists
 import { Download, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/custom-ui/SectionHeading";
@@ -19,8 +19,8 @@ import {
 import { BlendFunction } from "postprocessing";
 
 
-const resumeLink = "/resume/My_Resume.pdf"; // Use your actual resume file name
-const resumeFilename = "My_Resume.pdf";   // Use your actual resume file name
+const resumeLink = "/resume/Laksh_Pradhwani_Resume.pdf"; // Use your actual resume file name
+const resumeFilename = "Laksh_Pradhwani_Resume.pdf";   // Use your actual resume file name
 
 
 export default function ResumeSection() {
