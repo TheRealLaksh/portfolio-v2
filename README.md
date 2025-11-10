@@ -14,9 +14,9 @@
     Based on the excellent template by <a href="https://github.com/dhlananhh/my-3d-portfolio">dhlananhh</a>.
   </p>
 
-<a href="https://lakshp.live/" target="_blank">
+<a href="https://v2.lakshp.live/" target="_blank">
       <img
-        src="https://img.shields.io/website?label=Live%20Demo&style=for-the-badge&url=https%3A%2F%2Flakshp.live%2F&up_color=06B6D4"
+        src="https://img.shields.io/website?label=Live%20Demo&style=for-the-badge&url=https%3A%2F%2Fv2.lakshp.live%2F&up_color=06B6D4"
         alt="Live Demo"
       />
     </a>
@@ -42,7 +42,7 @@
 
 Welcome to the source code for my personal portfolio. This project showcases my skills, my passion for clean code, and my eye for engaging user experiences. I built this from the ground up using a modern tech stack to create a fast, responsive, and visually stunning platform to tell my professional story.
 
-### ▶️ [View Live Demo](https://lakshp.live/)
+### ▶️ [View Live Demo](https://v2.lakshp.live/)
 
 ---
 

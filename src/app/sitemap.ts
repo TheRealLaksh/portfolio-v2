@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 
-const siteUrl = "https://lakshp.live/";
+const siteUrl = "https://v2.lakshp.live/"; // CHANGED
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

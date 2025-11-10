@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://lakshp.live/sitemap.xml
+Sitemap: https://v2.lakshp.live/sitemap.xml
