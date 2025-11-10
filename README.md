@@ -10,9 +10,7 @@
   <p>
     My personal portfolio website, built with Next.js, Framer Motion, and Three.js.
   </p>
-  <p>
-    Based on the excellent template by <a href="https://github.com/dhlananhh/my-3d-portfolio">dhlananhh</a>.
-  </p>
+  
 
 <a href="https://lakshp.live/" target="_blank">
       <img
