@@ -9,7 +9,12 @@ const API_KEY = 'oqLZh!P`U61f,m4iV?l556.N&O`A%%h';
 function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // --- STATE MANAGEMENT ---
+  // --- BOOT SEQUENCE STATE ---
+  const [hasBooted, setHasBooted] = useState(false);
+  const [isBooting, setIsBooting] = useState(false);
+  const [bootLines, setBootLines] = useState([]);
+
+  // --- CHAT STATE ---
   const [chatMessages, setChatMessages] = useState(() => {
     try {
       const stored = localStorage.getItem('auroraChatMessages');
@@ -56,6 +61,38 @@ function ChatWidget() {
       setLoadingDots('');
     }
   }, [isLoading]);
+
+  // --- BOOT SEQUENCE LOGIC ---
+  useEffect(() => {
+    if (isOpen && !hasBooted) {
+      setIsBooting(true);
+      setBootLines([]); // Reset lines
+
+      const logs = [
+        "> SYSTEM_INIT...",
+        "> CONNECTING TO NEURAL NET...",
+        "> HANDSHAKE_VERIFIED::OK",
+        "> LINK ESTABLISHED."
+      ];
+
+      let lineIndex = 0;
+      const interval = setInterval(() => {
+        if (lineIndex < logs.length) {
+          setBootLines((prev) => [...prev, logs[lineIndex]]);
+          lineIndex++;
+        } else {
+          clearInterval(interval);
+          // Small delay before showing actual chat
+          setTimeout(() => {
+            setIsBooting(false);
+            setHasBooted(true);
+          }, 800);
+        }
+      }, 400); // Time between lines
+
+      return () => clearInterval(interval);
+    }
+  }, [isOpen, hasBooted]);
 
   // --- HANDLERS ---
   const sendMessage = async () => {
@@ -129,84 +166,92 @@ function ChatWidget() {
       
       {/* CHAT WINDOW */}
       {isOpen && (
-        <div className="mb-4 w-[340px] max-w-[90vw] rounded-2xl bg-[#0a0a0b]/95 text-slate-200 shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl p-4 flex flex-col animate-in slide-in-from-bottom-5 fade-in duration-300">
+        <div className="mb-4 w-[340px] max-w-[90vw] rounded-2xl bg-[#0a0a0b]/95 text-slate-200 shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl p-4 flex flex-col animate-in slide-in-from-bottom-5 fade-in duration-300 overflow-hidden min-h-[400px]">
           
-          <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-2">
-            <div>
-              <div className="text-sm font-bold text-white flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
-                </span>
-                AI Laksh
-              </div>
-              <p className="text-[10px] text-slate-400 font-medium tracking-wide">
-                Laksh's Digital Twin 
-              </p>
+          {isBooting ? (
+            // --- BOOT SEQUENCE INTERFACE (No Logo here) ---
+            <div className="flex-1 flex flex-col justify-center items-start h-full font-mono text-[11px] leading-6 p-4 text-sky-400 tracking-wide select-none">
+              {bootLines.map((line, index) => (
+                <div key={index} className="animate-in fade-in slide-in-from-left-2 duration-300">
+                  {line}
+                </div>
+              ))}
+              <div className="w-2 h-4 bg-sky-400/80 mt-1 animate-pulse" /> {/* Blinking Cursor */}
             </div>
-            <button onClick={clearChat} className="text-[10px] text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-white/5 transition-colors">
-              Clear
-            </button>
-          </div>
-
-          <div className="flex-1 min-h-[250px] max-h-[350px] overflow-y-auto space-y-3 pr-1 mb-3 custom-scrollbar" onWheel={handleInnerWheel}>
-            {chatMessages.length === 0 && (
-              <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                <div className="w-12 h-12 bg-slate-800/50 rounded-full flex items-center justify-center mb-3">
-                    <FiMessageSquare className="text-slate-400" size={20} />
+          ) : (
+            // --- STANDARD CHAT INTERFACE ---
+            <>
+              <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-2 animate-in fade-in duration-500">
+                <div>
+                  <div className="text-sm font-bold text-white flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                    </span>
+                    AI Laksh
+                  </div>
+                  <p className="text-[10px] text-slate-400 font-medium tracking-wide">
+                    Virtual Assistant
+                  </p>
                 </div>
-                <p className="text-xs text-slate-400">Ask me anything!</p>
+                <button onClick={clearChat} className="text-[10px] text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-white/5 transition-colors">
+                  Clear
+                </button>
               </div>
-            )}
-            {chatMessages.map((message, index) => (
-              <div key={index} className={`flex ${message.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed shadow-sm ${message.sender === 'You' ? 'bg-sky-600 text-white rounded-br-sm' : 'bg-slate-800/80 text-slate-200 border border-white/5 rounded-bl-sm'}`}>
-                  {message.type === 'loading' ? (
-                    <span className="animate-pulse">...</span>
-                  ) : message.type === 'mdx' ? (
-                    <div className="prose prose-invert prose-p:my-1 text-[13px]"><ReactMarkdown>{String(message.content)}</ReactMarkdown></div>
-                  ) : (
-                    message.content
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="relative">
-            <input
-              type="text"
-              className="w-full rounded-full border border-white/10 bg-black/40 pl-4 pr-12 py-3 text-[13px] text-white outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/50 transition-all placeholder:text-slate-600"
-              placeholder="Type a message..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <button onClick={sendMessage} disabled={isLoading || !input.trim()} className="absolute right-1.5 top-1.5 p-1.5 bg-sky-600 hover:bg-sky-500 rounded-full text-white transition-all disabled:opacity-50">
-              <FiSend size={14} />
-            </button>
-          </div>
+              <div className="flex-1 min-h-[250px] max-h-[350px] overflow-y-auto space-y-3 pr-1 mb-3 custom-scrollbar animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100" onWheel={handleInnerWheel}>
+                {/* EMPTY STATE - LOGO REMOVED */}
+                {chatMessages.length === 0 && (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-4">
+                    {/* Icon removed from here */}
+                    <p className="text-xs text-slate-400">Ask me anything!</p>
+                  </div>
+                )}
+                
+                {/* Messages */}
+                {chatMessages.map((message, index) => (
+                  <div key={index} className={`flex ${message.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed shadow-sm ${message.sender === 'You' ? 'bg-sky-600 text-white rounded-br-sm' : 'bg-slate-800/80 text-slate-200 border border-white/5 rounded-bl-sm'}`}>
+                      {message.type === 'loading' ? (
+                        <span className="animate-pulse">...</span>
+                      ) : message.type === 'mdx' ? (
+                        <div className="prose prose-invert prose-p:my-1 text-[13px]"><ReactMarkdown>{String(message.content)}</ReactMarkdown></div>
+                      ) : (
+                        message.content
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="relative animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200">
+                <input
+                  type="text"
+                  className="w-full rounded-full border border-white/10 bg-black/40 pl-4 pr-12 py-3 text-[13px] text-white outline-none focus:border-sky-500/50 focus:ring-1 focus:ring-sky-500/50 transition-all placeholder:text-slate-600"
+                  placeholder="Type a message..."
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <button onClick={sendMessage} disabled={isLoading || !input.trim()} className="absolute right-1.5 top-1.5 p-1.5 bg-sky-600 hover:bg-sky-500 rounded-full text-white transition-all disabled:opacity-50">
+                  <FiSend size={14} />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       )}
 
-      {/* --- SIDEBAR STYLE BUTTON --- */}
-      {/* 1. Idle: Transparent bg/border, text hidden.
-          2. Hover: Expands left, adds bg/border/shadow/text. 
-      */}
+      {/* --- BUTTON (Transparent when idle, Expands on Hover) --- */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className="group relative flex items-center justify-end w-12 hover:w-32 h-12 rounded-full overflow-hidden transition-all duration-500 ease-out bg-transparent border border-transparent hover:bg-slate-800 hover:border-slate-700 hover:shadow-lg hover:shadow-sky-900/20 active:scale-95"
         aria-label="Toggle Chat"
       >
-        {/* Glow/Fill Effect on Hover */}
         <div className="absolute inset-0 w-full h-full bg-sky-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-        {/* Sliding Text Label */}
         <span className="opacity-0 group-hover:opacity-100 text-sky-400 font-medium text-sm whitespace-nowrap transition-all duration-500 delay-100 absolute right-12 pr-2">
           AI Laksh
         </span>
-
-        {/* Icon (Always Visible) */}
         <div className="w-12 h-12 flex items-center justify-center shrink-0 z-10 text-slate-400 group-hover:text-sky-400 transition-colors duration-300">
           {isOpen ? <FiX size={22} /> : <FiMessageSquare size={22} />}
         </div>
