@@ -18,7 +18,7 @@ const SceneContent = () => {
   // Refs for meshes
   const starMeshRef = useRef();
   const connectMeshRef = useRef();
-  // const linesMeshRef = useRef(); // Removing lines ref as they are invisible
+  // const linesMeshRef = useRef(); // Removed to prevent performance issues with invisible lines
 
   // State
   const [targetColor] = useState(new THREE.Color(COLORS.home));

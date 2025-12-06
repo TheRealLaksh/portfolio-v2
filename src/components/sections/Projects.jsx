@@ -2,6 +2,9 @@ import React from 'react';
 import useGitHub from '../../hooks/useGitHub';
 import { FiGithub, FiExternalLink, FiMusic, FiPenTool, FiCalendar, FiShoppingCart, FiTv, FiCode } from 'react-icons/fi';
 
+// FIX: Define the username here so the link works
+const GITHUB_USERNAME = 'TheRealLaksh';
+
 const genreIcons = {
   music: FiMusic,
   art: FiPenTool,
