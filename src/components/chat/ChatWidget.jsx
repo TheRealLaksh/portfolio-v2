@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { FiMessageSquare, FiX, FiSend, FiCpu, FiCopy, FiExternalLink, FiBriefcase } from 'react-icons/fi';
+import { 
+  FiMessageSquare, FiX, FiSend, FiCopy, FiExternalLink, 
+  FiBriefcase, FiMaximize2, FiMinimize2 
+} from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
-import resumeFile from '../../assets/resume/laksh.pradhwani.resume.pdf'; // Ensure this path is correct based on your file structure
+import resumeFile from '../../assets/resume/laksh.pradhwani.resume.pdf'; 
 
 // API Configuration
 const API_URL = 'https://aiapi.ishan.vip/api/chat';
@@ -45,6 +48,7 @@ const ActionChip = ({ icon: Icon, label, onClick }) => (
 
 function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // --- BOOT SEQUENCE STATE ---
   const [hasBooted, setHasBooted] = useState(false);
@@ -95,7 +99,7 @@ function ChatWidget() {
     if (messagesEndRef.current) {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [chatMessages, isLoading, isOpen]);
+  }, [chatMessages, isLoading, isOpen, isExpanded]);
 
   // --- BOOT SEQUENCE LOGIC ---
   useEffect(() => {
@@ -131,7 +135,6 @@ function ChatWidget() {
   // --- ACTIONS ---
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('contact@lakshp.live');
-    // You could add a toast here, but for now we'll just let the user know via chat
     setChatMessages(prev => [...prev, { sender: 'Aurora', content: '📧 Email copied to clipboard!', type: 'text' }]);
   };
 
@@ -221,8 +224,12 @@ function ChatWidget() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="mb-4 w-[360px] max-w-[90vw] rounded-3xl overflow-hidden flex flex-col shadow-[0_0_50px_-10px_rgba(0,0,0,0.5)] border border-white/10"
-            // 1. Obsidian Glass Background
+            // Dynamic Size based on isExpanded
+            className={`mb-4 rounded-3xl overflow-hidden flex flex-col shadow-[0_0_50px_-10px_rgba(0,0,0,0.5)] border border-white/10 transition-all duration-500 ease-in-out
+              ${isExpanded 
+                ? 'w-[90vw] md:w-[600px] h-[70vh] md:h-[700px]' 
+                : 'w-[360px] max-w-[90vw] h-[500px]'
+              }`}
             style={{ 
                 background: 'rgba(5, 5, 5, 0.85)', 
                 backdropFilter: 'blur(16px)',
@@ -235,7 +242,8 @@ function ChatWidget() {
 
           {isBooting ? (
             // --- BOOT SEQUENCE ---
-            <div className="flex-1 flex flex-col justify-center items-start h-[450px] font-mono text-[11px] leading-6 p-6 text-sky-400 tracking-wide select-none z-10">
+            // FIXED: h-full to fill container
+            <div className="flex-1 flex flex-col justify-center items-start h-full font-mono text-[11px] leading-6 p-6 text-sky-400 tracking-wide select-none z-10">
               {bootLines.map((line, index) => (
                 <motion.div 
                     key={index} 
@@ -250,7 +258,8 @@ function ChatWidget() {
             </div>
           ) : (
             // --- MAIN INTERFACE ---
-            <div className="relative z-10 flex flex-col h-[500px]">
+            // FIXED: h-full to fill container
+            <div className="relative z-10 flex flex-col h-full">
               
               {/* Header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-white/5 backdrop-blur-md">
@@ -266,20 +275,29 @@ function ChatWidget() {
                     Online and Ready • v2.0.4
                   </p>
                 </div>
-                <button onClick={clearChat} className="text-[10px] font-medium text-slate-400 hover:text-white px-3 py-1.5 rounded-full border border-white/10 hover:bg-white/5 transition-all">
-                  Reset
-                </button>
+                
+                <div className="flex gap-2">
+                  {/* Resize Button */}
+                  <button 
+                    onClick={() => setIsExpanded(!isExpanded)} 
+                    className="text-slate-400 hover:text-white p-1.5 rounded-full hover:bg-white/10 transition-colors"
+                    title={isExpanded ? "Minimize" : "Expand"}
+                  >
+                    {isExpanded ? <FiMinimize2 size={14} /> : <FiMaximize2 size={14} />}
+                  </button>
+
+                  <button onClick={clearChat} className="text-[10px] font-medium text-slate-400 hover:text-white px-3 py-1.5 rounded-full border border-white/10 hover:bg-white/5 transition-all">
+                    Reset
+                  </button>
+                </div>
               </div>
 
               {/* Messages Area */}
               <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 custom-scrollbar scroll-smooth" onWheel={handleInnerWheel}>
                 
-                {/* Empty State with Quick Chips */}
+                {/* Empty State with Quick Chips - FIX: Removed Logo */}
                 {chatMessages.length === 0 && (
                   <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                    <div className="w-16 h-16 bg-gradient-to-tr from-sky-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center mb-4 border border-white/5 shadow-lg shadow-sky-500/10">
-                        <FiCpu className="text-sky-400" size={28} />
-                    </div>
                     <p className="text-sm text-slate-200 font-medium mb-1">System Ready</p>
                     <p className="text-xs text-slate-500 mb-6 max-w-[200px]">
                         I can explain Laksh's tech stack, experience, or just chat about AI.
@@ -329,7 +347,6 @@ function ChatWidget() {
                         className="flex justify-start"
                     >
                         <div className="bg-slate-800/60 border border-white/5 rounded-2xl rounded-bl-sm px-4 py-3">
-                            {/* 2. Liquid Wave Indicator */}
                             <TypingWave />
                         </div>
                     </motion.div>
