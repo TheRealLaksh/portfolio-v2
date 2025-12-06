@@ -6,6 +6,7 @@ import Experience from './components/sections/Experience';
 import Skills from './components/sections/Skills';
 import Projects from './components/sections/Projects';
 import Resume from './components/sections/Resume';
+import Contact from './components/sections/Contact'; // Import Contact
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -27,8 +28,9 @@ function App() {
       <Skills />
       <Projects />
       <Resume />
+      <Contact /> {/* Added Contact Section */}
       
-      <div className="h-[200px]" /> {/* Spacer */}
+      <div className="h-[100px]" /> {/* Smaller spacer before Footer */}
     </Layout>
   );
 }

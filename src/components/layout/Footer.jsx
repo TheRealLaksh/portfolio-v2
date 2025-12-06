@@ -18,7 +18,7 @@ const Footer = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 2. Animation Loop (The "Brain" of the spotlight)
+  // 2. Animation Loop
   useEffect(() => {
     const animate = () => {
       if (!maskRef.current) return;
@@ -26,20 +26,16 @@ const Footer = () => {
       if (!isHovered.current) {
         // --- IDLE STATE: Scan Left to Right ---
         const now = Date.now();
-        // Complete one sweep every 3 seconds
         const progress = (now % 3000) / 3000; 
-        
-        // Map progress (0 to 1) to SVG coordinates (0 to 300 width)
         const x = progress * 300; 
         
         maskRef.current.setAttribute('cx', x);
-        maskRef.current.setAttribute('cy', '50'); // Keep centered vertically
+        maskRef.current.setAttribute('cy', '50');
       }
       
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    // Start loop
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
@@ -47,17 +43,16 @@ const Footer = () => {
     };
   }, []);
 
-  // 3. Interactive Logic (Mouse Follower)
+  // 3. Interactive Logic
   const handleMouseMove = (e) => {
     if (!containerRef.current || !maskRef.current) return;
     
-    isHovered.current = true; // Pause auto-scan
+    isHovered.current = true;
 
     const rect = containerRef.current.getBoundingClientRect();
     const relX = e.clientX - rect.left;
     const relY = e.clientY - rect.top;
 
-    // Map DOM mouse coordinates to SVG ViewBox coordinates (300x100)
     const svgX = (relX / rect.width) * 300;
     const svgY = (relY / rect.height) * 100;
 
@@ -66,7 +61,7 @@ const Footer = () => {
   };
 
   const handleMouseLeave = () => {
-    isHovered.current = false; // Resume auto-scan
+    isHovered.current = false;
   };
 
   const scrollToTop = () => {
@@ -85,9 +80,9 @@ const Footer = () => {
   return (
     <footer className="relative w-full bg-[#020203] border-t border-white/5 overflow-hidden pt-14 pb-28 md:pb-14">
       
-      {/* Background Overlay */}
+      {/* Background Overlay - Made slightly brighter */}
       <div className="absolute inset-0 z-0 pointer-events-none"
-           style={{ background: "radial-gradient(125% 125% at 50% 10%, rgba(0, 0, 0, 0) 40%, rgba(60, 162, 250, 0.1) 100%)" }}>
+           style={{ background: "radial-gradient(125% 125% at 50% 10%, rgba(0, 0, 0, 0) 40%, rgba(60, 162, 250, 0.15) 100%)" }}>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 flex flex-col items-center">
@@ -175,7 +170,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* --- INTERACTIVE TEXT (Auto-Scan + Mouse Follow) --- */}
+        {/* --- INTERACTIVE TEXT (Brighter Version) --- */}
         <div 
           id="footer-hover-container"
           ref={containerRef}
@@ -186,43 +181,59 @@ const Footer = () => {
         >
           <svg className="w-full h-full" viewBox="0 0 300 100" preserveAspectRatio="xMidYMid meet">
             <defs>
-              {/* Rainbow Gradient for the Text */}
+              {/* Brighter Rainbow Gradient */}
               <linearGradient id="textGradient" gradientUnits="userSpaceOnUse" cx="50%" cy="50%" r="25%">
-                <stop offset="0%" stopColor="#eab308" />
-                <stop offset="25%" stopColor="#ef4444" />
-                <stop offset="50%" stopColor="#80eeb4" />
-                <stop offset="75%" stopColor="#06b6d4" />
-                <stop offset="100%" stopColor="#8b5cf6" />
+                <stop offset="0%" stopColor="#facc15" /> {/* Yellow-400 */}
+                <stop offset="25%" stopColor="#f87171" /> {/* Red-400 */}
+                <stop offset="50%" stopColor="#4ade80" /> {/* Green-400 */}
+                <stop offset="75%" stopColor="#22d3ee" /> {/* Cyan-400 */}
+                <stop offset="100%" stopColor="#a78bfa" /> {/* Violet-400 */}
               </linearGradient>
 
-              {/* The Spotlight Mask */}
               <radialGradient 
                 id="revealMask" 
                 gradientUnits="userSpaceOnUse" 
-                r="25%" // Spotlight Size
-                cx="0" // Initially 0, updated by JS
+                r="30%" // Larger spotlight
+                cx="0" 
                 cy="50" 
                 ref={maskRef}
               >
-                <stop offset="0%" stopColor="white" />
-                <stop offset="100%" stopColor="black" />
+                <stop offset="0%" stopColor="white" stopOpacity="1" />
+                <stop offset="100%" stopColor="black" stopOpacity="0" />
               </radialGradient>
 
               <mask id="textMask">
                 <rect x="0" y="0" width="100%" height="100%" fill="url(#revealMask)" />
               </mask>
+              
+              {/* Glow Filter */}
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
             </defs>
 
-            {/* Layer 1: Faint Outline (Always Visible) */}
-            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" strokeWidth="0.3"
-              className="font-[helvetica] font-bold fill-transparent stroke-neutral-800 text-7xl opacity-50">
+            {/* Layer 1: Brighter Outline (Visible when idle) */}
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" strokeWidth="0.8"
+              className="font-[helvetica] font-bold fill-transparent stroke-neutral-500 text-7xl opacity-60">
               LAKSH
             </text>
             
-            {/* Layer 2: Revealed Gradient Text (Masked) */}
-            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" strokeWidth="0.3"
+            {/* Layer 2: Persistent Blue Glow (Subtle) */}
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" strokeWidth="1"
+              className="font-[helvetica] font-bold fill-transparent stroke-sky-500 text-7xl opacity-20 animate-pulse"
+              filter="url(#glow)">
+              LAKSH
+            </text>
+
+            {/* Layer 3: Revealed Gradient Text (Masked) */}
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" strokeWidth="1"
               className="font-[helvetica] font-bold fill-transparent stroke-[url(#textGradient)] text-7xl"
-              mask="url(#textMask)">
+              mask="url(#textMask)"
+              filter="url(#glow)">
               LAKSH
             </text>
           </svg>
