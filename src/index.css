@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cursor-size: 500px;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #050505;
+  overflow-x: hidden;
+}
+
+body {
+  @apply bg-background text-slate-300 antialiased selection:bg-sky-500/30 selection:text-sky-200;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Spotlight Effect Utility */
+.spotlight {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 70%
+  );
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  @apply bg-slate-900/50 backdrop-blur-md border border-white/10;
+}
+
+.skill-card-glass {
+  @apply bg-slate-900/40 backdrop-blur-sm border border-white/5;
+}
+
+/* Footer Text Animation */
+@keyframes footer-text-anim {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; text-shadow: 0 0 20px rgba(14, 165, 233, 0.5); }
+}
+
+/* Chatbot Typing Indicator */
+@keyframes typing {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.5); opacity: 0.5; }
+}

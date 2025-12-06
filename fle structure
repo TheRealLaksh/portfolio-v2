@@ -1,0 +1,69 @@
+src/
+├── assets/
+│   ├── images/
+│   │   ├── laksh.pradhwani.webp    # Profile picture
+│   │   └── meta-image.webp
+│   ├── resume/
+│   │   └── laksh.pradhwani.resume.pdf
+│   └── sounds/
+│       ├── pop.mp3                 # Chatbot sound
+│       └── warp.mp3                # Optional warp sound
+│
+├── components/
+│   ├── 3d/                         # Three.js Components
+│   │   ├── Background.jsx          # Main Scene (Fog, Camera)
+│   │   ├── StarField.jsx           # Static Dust (Particles)
+│   │   ├── Constellation.jsx       # Interactive Network
+│   │   └── WarpEffect.jsx          # Camera movement logic
+│   │
+│   ├── layout/
+│   │   ├── Navbar.jsx              # Tab navigation & ScrollSpy
+│   │   ├── Footer.jsx              # Footer, Spotify, SVG Logo
+│   │   ├── Layout.jsx              # Main wrapper
+│   │   ├── SocialSidebar.jsx       # Left fixed sidebar
+│   │   └── CustomCursor.jsx        # Spotlight mouse follower
+│   │
+│   ├── sections/
+│   │   ├── Hero.jsx                # Typed text, CTA buttons
+│   │   ├── About.jsx               # Bio, Info Grid
+│   │   ├── Experience.jsx          # Timeline implementation
+│   │   ├── Skills.jsx              # Tilt cards grid
+│   │   ├── Projects.jsx            # GitHub API Grid
+│   │   ├── Resume.jsx              # Download buttons
+│   │   └── Contact.jsx             # Formspree form
+│   │
+│   ├── ui/                         # Reusable UI elements
+│   │   ├── SectionTitle.jsx        # Consistent headers
+│   │   ├── Button.jsx              # Expanding circle buttons
+│   │   ├── Badge.jsx               # Tech badges
+│   │   ├── Toast.jsx               # Copy notifications
+│   │   └── ProgressBar.jsx         # Top scroll indicator
+│   │
+│   └── chatbot/
+│       ├── ChatWidget.jsx          # Main container
+│       ├── ChatMessage.jsx         # Bubble component
+│       ├── ChatInput.jsx           # Input & Chips
+│       └── TypingIndicator.jsx     # Animated dots
+│
+├── context/
+│   ├── ScrollContext.jsx           # For scroll spy & nav state
+│   └── SoundContext.jsx            # Audio management
+│
+├── hooks/
+│   ├── useGitHub.js                # Fetches repos & detects genre
+│   ├── useSpotify.js               # Fetches Last.fm data
+│   ├── useScrollSpy.js             # Active tab detection
+│   └── useChatbot.js               # AI logic, fuzzy match, KB
+│
+├── data/
+│   ├── knowledgeBase.js            # AI responses & keywords
+│   ├── skillsData.js               # List of skills & colors
+│   └── timelineData.js             # Experience history
+│
+├── utils/
+│   ├── helpers.js                  # Time formatting, string tools
+│   └── animations.js               # Framer Motion variants
+│
+├── App.jsx                         # Main Router/Structure
+├── main.jsx                        # Entry point
+└── index.css                       # Tailwind directives & Custom CSS
