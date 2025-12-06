@@ -1,4 +1,5 @@
 import React from 'react';
+import Tilt from 'react-parallax-tilt'; // Import Tilt
 import useGitHub from '../../hooks/useGitHub';
 import { FiGithub, FiExternalLink, FiMusic, FiPenTool, FiCalendar, FiShoppingCart, FiTv, FiCode } from 'react-icons/fi';
 
@@ -13,7 +14,6 @@ const genreIcons = {
   code: <FiCode size={20} />
 };
 
-// Color mapping for language badges
 const langColors = {
   JavaScript: "text-yellow-300 bg-yellow-500/10 border-yellow-500/20",
   HTML: "text-orange-300 bg-orange-500/10 border-orange-500/20",
@@ -34,119 +34,100 @@ const Projects = () => {
     <section id="projects" className="my-16 sm:my-32 scroll-mt-20 relative z-10" data-aos="fade-up">
       <div className="w-full px-6 md:px-12">
 
-        {/* Header */}
         <div className="flex items-center justify-between mb-12 max-w-[1600px] mx-auto">
           <h2 className="text-3xl font-bold text-white">GitHub Shipments</h2>
           <div className="h-[1px] flex-grow bg-gradient-to-r from-slate-700 to-transparent ml-6"></div>
         </div>
 
-        {/* Grid */}
         <div id="github-projects-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[1600px] mx-auto">
           
-          {/* Loading State */}
-          {loading && (
-            <p className="text-slate-400 col-span-full text-center animate-pulse font-mono">Loading neural interface...</p>
-          )}
+          {loading && <p className="text-slate-400 col-span-full text-center animate-pulse font-mono">Loading neural interface...</p>}
+          {error && <p className="text-red-400 col-span-full text-center">⚠️ {error}</p>}
 
-          {/* Error State */}
-          {error && (
-            <p className="text-red-400 col-span-full text-center">⚠️ {error}</p>
-          )}
-
-          {/* Project Cards */}
           {!loading && !error && projects.map((repo, index) => {
              const Icon = genreIcons[repo.genre] || genreIcons.code;
-             const languages = repo.languages.length > 0 ? repo.languages : ["Code"];
+             const languages = repo.languages && repo.languages.length > 0 ? repo.languages : ["Code"];
 
              return (
-              <div 
+              // Wrapped in Tilt for Holographic Effect
+              <Tilt 
                 key={repo.id} 
-                className="group relative flex flex-col h-full bg-[#050505] border border-zinc-800 rounded-2xl overflow-hidden transition-all duration-500 hover:border-zinc-600 hover:shadow-2xl hover:-translate-y-1"
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
+                tiltMaxAngleX={5} 
+                tiltMaxAngleY={5} 
+                scale={1.02} 
+                glareEnable={true} 
+                glareMaxOpacity={0.15} 
+                glareColor="#ffffff" 
+                glarePosition="all"
+                className="h-full"
               >
-                <div className="p-6 flex flex-col flex-grow">
+                <div 
+                  className="group relative flex flex-col h-full bg-[#050505] border border-zinc-800 rounded-2xl overflow-hidden transition-all duration-500 hover:border-zinc-600 hover:shadow-2xl"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
+                >
+                  <div className="p-6 flex flex-col flex-grow relative z-10">
 
-                  {/* Header Row: Icon Left, Buttons Right */}
-                  <div className="flex justify-between items-center mb-6">
-                    
-                    {/* Genre Icon Circle */}
-                    <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
-                      {Icon}
-                    </div>
+                    <div className="flex justify-between items-center mb-6">
+                      <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
+                        {Icon}
+                      </div>
 
-                    {/* Action Buttons - Updated to match SocialSidebar styling */}
-                    <div className="flex gap-3">
-                      
-                      {/* Live Demo (Emerald Theme) */}
-                      {repo.demo && (
-                        <a 
-                          href={repo.demo} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          aria-label="Live Demo"
-                          className="group/btn relative flex items-center justify-start w-10 hover:w-28 h-10 rounded-full overflow-hidden transition-all duration-500 ease-out bg-transparent border border-transparent hover:bg-slate-800 hover:border-slate-700 hover:shadow-lg hover:shadow-emerald-900/20"
+                      <div className="flex gap-3">
+                        {repo.demo && (
+                          <a href={repo.demo} target="_blank" rel="noopener noreferrer"
+                            className="group/btn relative flex items-center justify-start w-10 hover:w-28 h-10 rounded-full overflow-hidden transition-all duration-500 ease-out bg-transparent border border-transparent hover:bg-slate-800 hover:border-slate-700 hover:shadow-lg hover:shadow-emerald-900/20"
+                          >
+                            <div className="absolute inset-0 w-full h-full bg-emerald-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                            <div className="w-10 h-10 flex items-center justify-center shrink-0 z-10 text-slate-400 group-hover/btn:text-emerald-400 transition-colors duration-300">
+                              <FiExternalLink size={18} />
+                            </div>
+                            <span className="opacity-0 group-hover/btn:opacity-100 text-emerald-400 font-medium text-xs whitespace-nowrap transition-all duration-500 delay-100 absolute left-10 pl-1">
+                              Live Demo
+                            </span>
+                          </a>
+                        )}
+
+                        <a href={repo.url} target="_blank" rel="noopener noreferrer"
+                          className="group/btn relative flex items-center justify-start w-10 hover:w-24 h-10 rounded-full overflow-hidden transition-all duration-500 ease-out bg-transparent border border-transparent hover:bg-slate-800 hover:border-slate-700 hover:shadow-lg hover:shadow-green-900/20"
                         >
-                          <div className="absolute inset-0 w-full h-full bg-emerald-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                          <div className="w-10 h-10 flex items-center justify-center shrink-0 z-10 text-slate-400 group-hover/btn:text-emerald-400 transition-colors duration-300">
-                            <FiExternalLink size={18} />
+                          <div className="absolute inset-0 w-full h-full bg-green-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                          <div className="w-10 h-10 flex items-center justify-center shrink-0 z-10 text-slate-400 group-hover/btn:text-green-400 transition-colors duration-300">
+                            <FiGithub size={18} />
                           </div>
-                          <span className="opacity-0 group-hover/btn:opacity-100 text-emerald-400 font-medium text-xs whitespace-nowrap transition-all duration-500 delay-100 absolute left-10 pl-1">
-                            Live Demo
+                          <span className="opacity-0 group-hover/btn:opacity-100 text-green-400 font-medium text-xs whitespace-nowrap transition-all duration-500 delay-100 absolute left-10 pl-1">
+                            Code
                           </span>
                         </a>
-                      )}
-
-                      {/* Code (Green/GitHub Theme) */}
-                      <a 
-                        href={repo.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        aria-label="View Code"
-                        className="group/btn relative flex items-center justify-start w-10 hover:w-24 h-10 rounded-full overflow-hidden transition-all duration-500 ease-out bg-transparent border border-transparent hover:bg-slate-800 hover:border-slate-700 hover:shadow-lg hover:shadow-green-900/20"
-                      >
-                        <div className="absolute inset-0 w-full h-full bg-green-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                        <div className="w-10 h-10 flex items-center justify-center shrink-0 z-10 text-slate-400 group-hover/btn:text-green-400 transition-colors duration-300">
-                          <FiGithub size={18} />
-                        </div>
-                        <span className="opacity-0 group-hover/btn:opacity-100 text-green-400 font-medium text-xs whitespace-nowrap transition-all duration-500 delay-100 absolute left-10 pl-1">
-                          Code
-                        </span>
-                      </a>
-
+                      </div>
                     </div>
+
+                    <h3 className="text-xl font-bold text-white mb-3 tracking-tight group-hover:text-sky-200 transition-colors">
+                      {repo.name}
+                    </h3>
+
+                    <p className="text-sm text-zinc-400 leading-relaxed font-light flex-grow mb-6">
+                      {repo.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-zinc-900">
+                      {languages.map((lang, i) => {
+                           const colorClass = langColors[lang] || langColors.default;
+                           return (
+                             <span key={i} className={`text-[11px] font-semibold px-3 py-1 rounded-md border ${colorClass}`}>
+                               {lang}
+                             </span>
+                           );
+                      })}
+                    </div>
+
                   </div>
-
-                  {/* Title */}
-                  <h3 className="text-xl font-bold text-white mb-3 tracking-tight group-hover:text-sky-200 transition-colors">
-                    {repo.name}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-sm text-zinc-400 leading-relaxed font-light flex-grow mb-6">
-                    {repo.description}
-                  </p>
-
-                  {/* Language Badges - Dynamic List */}
-                  <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-zinc-900">
-                    {languages.map((lang, i) => {
-                         // Get specific color for this language or use default
-                         const colorClass = langColors[lang] || langColors.default;
-                         return (
-                           <span key={i} className={`text-[10px] font-semibold px-3 py-1 rounded-md border ${colorClass}`}>
-                             {lang}
-                           </span>
-                         );
-                    })}
-                  </div>
-
                 </div>
-              </div>
+              </Tilt>
              );
           })}
         </div>
 
-        {/* Explore Button */}
         <div className="view-more-container mt-16 text-center" data-aos="fade-up">
           <a href={`https://github.com/${GITHUB_USERNAME}?tab=repositories`} target="_blank" rel="noopener noreferrer"
             className="relative inline-flex group items-center justify-center px-8 py-3 overflow-hidden font-medium text-sky-400 border border-sky-400/30 rounded-lg hover:bg-sky-400/10 transition-all duration-300">

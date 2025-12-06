@@ -4,7 +4,8 @@ import Background from '../3d/Background';
 import Preloader from '../ui/Preloader';
 import Navbar from './Navbar';
 import SocialSidebar from './SocialSidebar';
-import Footer from './Footer'; // Import Footer
+import Footer from './Footer';
+import Spotlight from '../ui/Spotlight'; // Import Spotlight
 
 const Layout = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,14 @@ const Layout = ({ children }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 2, ease: "easeOut" }}
          >
+            {/* 1. Background Stars */}
             <Background />
+            
+            {/* 2. Mouse Spotlight */}
+            <Spotlight />
+
+            {/* 3. Cinematic Grain Overlay */}
+            <div className="bg-grain"></div>
          </motion.div>
       )}
 
@@ -40,7 +48,6 @@ const Layout = ({ children }) => {
             {children}
           </motion.main>
 
-          {/* Footer added here */}
           <Footer />
         </>
       )}

@@ -2,98 +2,177 @@ import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const StarLayer = ({ count, size, speedFactor, color, opacity, transparent = true }) => {
-  const mesh = useRef();
-  
-  const particles = useMemo(() => {
-    const temp = [];
-    for (let i = 0; i < count; i++) {
-      const x = (Math.random() - 0.5) * 3000;
-      const y = (Math.random() - 0.5) * 3000;
-      const z = (Math.random() - 0.5) * 3000;
-      temp.push(x, y, z);
+// --- CONFIGURATION ---
+const COLORS = {
+  home: new THREE.Color(0x0ea5e9),
+  about: new THREE.Color(0xffffff),
+  experience: new THREE.Color(0xa855f7),
+  skills: new THREE.Color(0x22c55e),
+  projects: new THREE.Color(0xf43f5e),
+  contact: new THREE.Color(0xeab308)
+};
+
+const SceneContent = ({ isMusicPlaying }) => {
+  const { camera, gl } = useThree();
+  const starMeshRef = useRef();
+  const connectMeshRef = useRef();
+  const linesMeshRef = useRef();
+  const [targetColor] = useState(new THREE.Color(COLORS.home));
+  const mouse = useRef(new THREE.Vector2(9999, 9999));
+  const warpSpeed = useRef(0);
+  const baseSpeed = 0.0005;
+
+  // --- 2. OBJECTS SETUP ---
+  const starCount = 12000;
+  const starPositions = useMemo(() => {
+    const positions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount * 3; i++) {
+      positions[i] = (Math.random() - 0.5) * 2500;
     }
-    return new Float32Array(temp);
-  }, [count]);
+    return positions;
+  }, []);
+
+  const connectCount = 200;
+  const [connectPositions, originalPositions] = useMemo(() => {
+    const positions = new Float32Array(connectCount * 3);
+    const originals = new Float32Array(connectCount * 3);
+    for (let i = 0; i < connectCount; i++) {
+      const x = (Math.random() - 0.5) * 1500;
+      const y = (Math.random() - 0.5) * 1500;
+      const z = (Math.random() - 0.5) * 1500;
+      positions[i * 3] = x; positions[i * 3 + 1] = y; positions[i * 3 + 2] = z;
+      originals[i * 3] = x; originals[i * 3 + 1] = y; originals[i * 3 + 2] = z;
+    }
+    return [positions, originals];
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'experience', 'skills', 'projects', 'contact'];
+      let current = 'home';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= (el.offsetTop - window.innerHeight / 3)) current = id;
+      });
+      if (COLORS[current]) targetColor.set(COLORS[current]);
+    };
+    const handleWarp = () => {
+      warpSpeed.current = 20;
+      gl.domElement.style.filter = 'blur(2px)';
+      setTimeout(() => { setTimeout(() => { warpSpeed.current = 0; gl.domElement.style.filter = 'blur(0px)'; }, 800); }, 300);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('warp-speed', handleWarp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('warp-speed', handleWarp);
+    };
+  }, [gl.domElement, targetColor]);
 
   useFrame((state, delta) => {
-    if (!mesh.current) return;
-    
-    // Continuous subtle rotation
-    mesh.current.rotation.y -= delta * 0.02 * speedFactor;
-    mesh.current.rotation.x -= delta * 0.01 * speedFactor;
+    if (!connectMeshRef.current || !starMeshRef.current || !linesMeshRef.current) return;
 
-    // Scroll-linked rotation (Parallax)
-    // We read window.scrollY directly for performance in R3F loop
-    const scrollY = window.scrollY;
-    mesh.current.rotation.z = scrollY * 0.0005 * speedFactor; 
-    mesh.current.position.y = scrollY * 0.5 * speedFactor; // Parallax move up/down
+    // --- AUDIO REACTIVE PULSE ---
+    // If music is playing, scale the stars based on time
+    if (isMusicPlaying) {
+      const pulse = 1 + Math.sin(state.clock.elapsedTime * 10) * 0.1; // Fast pulse
+      starMeshRef.current.scale.setScalar(pulse);
+    } else {
+      starMeshRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1); // Return to normal
+    }
+
+    connectMeshRef.current.material.color.lerp(targetColor, 0.05);
+    linesMeshRef.current.material.color.lerp(targetColor, 0.05);
+
+    const speed = baseSpeed + (warpSpeed.current * 0.01);
+    if (warpSpeed.current > 0) {
+      starMeshRef.current.rotation.z += 0.02;
+      camera.position.z -= speed * 50;
+      if (camera.position.z < -1000) camera.position.z = 100;
+    } else {
+      starMeshRef.current.rotation.y += speed;
+      connectMeshRef.current.rotation.y += speed;
+      linesMeshRef.current.rotation.y += speed;
+      camera.position.z += (100 - camera.position.z) * 0.05;
+    }
+
+    const positions = connectMeshRef.current.geometry.attributes.position.array;
+    const tempVec = new THREE.Vector3();
+
+    for (let i = 0; i < connectCount; i++) {
+      const px = positions[i * 3];
+      const py = positions[i * 3 + 1];
+      const pz = positions[i * 3 + 2];
+      const ox = originalPositions[i * 3];
+      const oy = originalPositions[i * 3 + 1];
+      const oz = originalPositions[i * 3 + 2];
+
+      tempVec.set(px, py, pz);
+      tempVec.applyMatrix4(connectMeshRef.current.matrixWorld);
+      tempVec.project(camera);
+
+      const dx = tempVec.x - mouse.current.x;
+      const dy = tempVec.y - mouse.current.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 0.2) {
+        const force = (0.2 - dist) * 200;
+        positions[i * 3] -= dx * force;
+        positions[i * 3 + 1] -= dy * force;
+      } else {
+        positions[i * 3] += (ox - px) * 0.05;
+        positions[i * 3 + 1] += (oy - py) * 0.05;
+        positions[i * 3 + 2] += (oz - pz) * 0.05;
+      }
+    }
+
+    connectMeshRef.current.geometry.attributes.position.needsUpdate = true;
+    const emptyPos = new Float32Array(0);
+    linesMeshRef.current.geometry.setAttribute('position', new THREE.BufferAttribute(emptyPos, 3));
   });
 
   return (
-    <points ref={mesh}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={particles} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial 
-        size={size} 
-        color={color} 
-        transparent={transparent} 
-        opacity={opacity} 
-        sizeAttenuation={true} 
-        depthWrite={false} 
-      />
-    </points>
-  );
-};
-
-const SceneContent = () => {
-  const { gl } = useThree();
-  const warpSpeed = useRef(0);
-
-  useEffect(() => {
-    const handleWarp = () => {
-      warpSpeed.current = 20;
-      gl.domElement.style.transition = 'filter 0.3s ease-out';
-      gl.domElement.style.filter = 'blur(4px) brightness(1.5)';
-      
-      setTimeout(() => {
-        setTimeout(() => {
-          warpSpeed.current = 0;
-          gl.domElement.style.filter = 'blur(0px) brightness(1)';
-        }, 800);
-      }, 300);
-    };
-
-    window.addEventListener('warp-speed', handleWarp);
-    return () => window.removeEventListener('warp-speed', handleWarp);
-  }, [gl.domElement]);
-
-  return (
     <>
-      <fog attach="fog" args={['#000000', 50, 1200]} />
-      
-      {/* Layer 1: Distant Background Dust (Slowest) */}
-      <StarLayer count={8000} size={0.8} speedFactor={0.2} color="#6b7280" opacity={0.4} />
-
-      {/* Layer 2: Mid-range Stars (Medium Speed) */}
-      <StarLayer count={3000} size={1.5} speedFactor={0.5} color="#ffffff" opacity={0.6} />
-
-      {/* Layer 3: Foreground "Fliers" (Fastest - Creates Depth) */}
-      <StarLayer count={500} size={3} speedFactor={1.2} color="#0ea5e9" opacity={0.8} />
+      <fog attach="fog" args={[0x000000, 0.0008]} />
+      <points ref={starMeshRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" count={starCount} array={starPositions} itemSize={3} />
+        </bufferGeometry>
+        <pointsMaterial size={0.8} color={0xffffff} transparent opacity={0.8} />
+      </points>
+      <points ref={connectMeshRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" count={connectCount} array={connectPositions} itemSize={3} />
+        </bufferGeometry>
+        <pointsMaterial size={2.5} color={0x0ea5e9} />
+      </points>
+      <lineSegments ref={linesMeshRef}>
+        <bufferGeometry />
+        <lineBasicMaterial color={0x0ea5e9} transparent opacity={0.2} />
+      </lineSegments>
     </>
   );
 };
 
-const Background = () => {
+const Background = ({ isMusicPlaying }) => {
   return (
-    <div className="fixed inset-0 z-0 bg-black pointer-events-none">
+    <div style={{
+      position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+      zIndex: -1, transition: 'filter 0.5s ease', backgroundColor: '#000000'
+    }}>
       <Canvas
-        camera={{ position: [0, 0, 100], fov: 75 }}
-        gl={{ antialias: false, alpha: false }} // Performance optimization
-        dpr={[1, 1.5]} // Cap pixel ratio for speed
+        camera={{ position: [0, 0, 100], fov: 75, near: 0.1, far: 2000 }}
+        gl={{ alpha: true, antialias: true }}
+        dpr={[1, 2]}
       >
-        <SceneContent />
+        <SceneContent isMusicPlaying={isMusicPlaying} />
       </Canvas>
     </div>
   );
