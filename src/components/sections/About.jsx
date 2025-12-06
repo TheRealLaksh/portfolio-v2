@@ -1,7 +1,7 @@
 import React from 'react';
 import profileImg from '../../assets/images/laksh.pradhwani.webp';
-import { TextReveal } from '../ui/TextReveal'; // Import Animation
-import { Parallax } from '../ui/Parallax';     // Import Animation
+import { TextReveal } from '../ui/TextReveal';
+import { Parallax } from '../ui/Parallax';
 
 const About = () => {
   return (
@@ -9,23 +9,24 @@ const About = () => {
       <div className="w-full px-6 md:px-12 relative z-10">
 
         {/* Header with Reveal */}
-        <TextReveal className="mb-16 text-center">
-          <h2 className="section-title text-3xl font-bold text-white relative inline-block">
+        <TextReveal className="mb-16 text-center flex justify-center">
+          <h2 className="text-3xl font-bold text-white relative inline-block">
             About Me
           </h2>
         </TextReveal>
 
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-12 max-w-[1600px] mx-auto">
 
-          {/* Left: Image with Parallax (Moves slower for depth) */}
-          <Parallax speed={-0.05} className="relative w-full lg:w-1/2 h-[400px] sm:h-[500px] lg:h-auto rounded-2xl overflow-hidden shadow-2xl group order-1">
+          {/* Left: Image with Parallax */}
+          {/* FIX: Added 'lg:min-h-[500px]' to ensure the image has space to show */}
+          <Parallax speed={-0.05} className="relative w-full lg:w-1/2 h-[400px] sm:h-[500px] lg:min-h-[500px] rounded-2xl overflow-hidden shadow-2xl group order-1">
             <img 
               src={profileImg} 
               alt="Laksh Pradhwani - Web Developer"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
 
-            <div className="absolute bottom-5 left-5">
+            <div className="absolute bottom-5 left-5 z-10">
               <div className="flex items-center gap-3 bg-slate-900/50 backdrop-blur-md px-5 py-3 rounded-xl border border-white/10 shadow-lg">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -41,7 +42,7 @@ const About = () => {
             <div className="relative p-6 sm:p-10 rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-md shadow-xl h-full flex flex-col justify-center">
 
               <div className="text-slate-300 text-lg leading-relaxed space-y-6">
-                {/* Paragraphs wrapped in TextReveal for "line-by-line" reading effect */}
+                
                 <TextReveal>
                   <p>
                     I’m an aspiring <strong className="text-sky-400">AI/ML Engineer</strong> and high
