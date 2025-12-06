@@ -19,41 +19,49 @@ const useGitHub = () => {
   useEffect(() => {
     const fetchRepos = async () => {
       try {
+        // Fetch all repos in parallel
         const repoRequests = REPO_NAMES.map(name => 
           axios.get(`https://api.github.com/repos/${GITHUB_USERNAME}/${name}`)
         );
 
-        const responses = await Promise.all(repoRequests);
+        // Use allSettled so one failure doesn't break the whole section
+        const results = await Promise.allSettled(repoRequests);
         
-        const data = responses.map(res => {
-          const repo = res.data;
-          
-          // Genre Detection Logic
-          let genre = 'code';
-          const lowerName = repo.name.toLowerCase();
-          if (lowerName.includes('music')) genre = 'music';
-          else if (lowerName.includes('artist')) genre = 'art';
-          else if (lowerName.includes('calendar') || lowerName.includes('callender')) genre = 'calendar';
-          else if (lowerName.includes('shop')) genre = 'shop';
-          else if (lowerName.includes('stranger')) genre = 'tv';
+        const validData = results
+          .filter(result => result.status === 'fulfilled')
+          .map(result => {
+            const repo = result.value.data;
+            
+            // Genre Detection Logic
+            let genre = 'code';
+            const lowerName = repo.name.toLowerCase();
+            if (lowerName.includes('music')) genre = 'music';
+            else if (lowerName.includes('artist')) genre = 'art';
+            else if (lowerName.includes('calendar') || lowerName.includes('callender')) genre = 'calendar';
+            else if (lowerName.includes('shop')) genre = 'shop';
+            else if (lowerName.includes('stranger')) genre = 'tv';
 
-          return {
-            id: repo.id,
-            name: repo.name,
-            description: repo.description,
-            url: repo.html_url,
-            demo: repo.homepage,
-            stars: repo.stargazers_count,
-            language: repo.language,
-            genre: genre
-          };
-        });
+            return {
+              id: repo.id,
+              name: repo.name,
+              description: repo.description,
+              url: repo.html_url,
+              demo: repo.homepage,
+              stars: repo.stargazers_count,
+              language: repo.language,
+              genre: genre
+            };
+          });
 
-        setProjects(data);
-        setLoading(false);
+        if (validData.length === 0) {
+          setError("No projects found or API limit reached.");
+        } else {
+          setProjects(validData);
+        }
       } catch (err) {
         console.error("GitHub API Error:", err);
-        setError("Failed to load projects from GitHub.");
+        setError("Failed to load projects.");
+      } finally {
         setLoading(false);
       }
     };

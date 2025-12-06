@@ -18,7 +18,7 @@ const SceneContent = () => {
   // Refs for meshes
   const starMeshRef = useRef();
   const connectMeshRef = useRef();
-  const linesMeshRef = useRef();
+  // const linesMeshRef = useRef(); // Removing lines ref as they are invisible
 
   // State
   const [targetColor] = useState(new THREE.Color(COLORS.home));
@@ -105,11 +105,10 @@ const SceneContent = () => {
 
   // --- 4. ANIMATION LOOP ---
   useFrame(() => {
-    if (!connectMeshRef.current || !starMeshRef.current || !linesMeshRef.current) return;
+    if (!connectMeshRef.current || !starMeshRef.current) return;
 
     // 1. Color Transition
     connectMeshRef.current.material.color.lerp(targetColor, 0.05);
-    linesMeshRef.current.material.color.lerp(targetColor, 0.05);
 
     // 2. Rotation & Warp
     const speed = baseSpeed + (warpSpeed.current * 0.01);
@@ -121,12 +120,11 @@ const SceneContent = () => {
     } else {
       starMeshRef.current.rotation.y += speed;
       connectMeshRef.current.rotation.y += speed;
-      linesMeshRef.current.rotation.y += speed;
       
       camera.position.z += (100 - camera.position.z) * 0.05;
     }
 
-    // 3. Mouse Repulsion & Constellation Logic
+    // 3. Mouse Repulsion Logic
     const positions = connectMeshRef.current.geometry.attributes.position.array;
     const tempVec = new THREE.Vector3();
 
@@ -159,17 +157,13 @@ const SceneContent = () => {
     }
 
     connectMeshRef.current.geometry.attributes.position.needsUpdate = true;
-
-    // Update Lines (Empty array as per script for invisible lines)
-    const emptyPos = new Float32Array(0);
-    linesMeshRef.current.geometry.setAttribute('position', new THREE.BufferAttribute(emptyPos, 3));
   });
 
   return (
     <>
       <fog attach="fog" args={[0x000000, 0.0008]} />
       
-      {/* A. Background Dust - Size reduced from 1.5 to 0.8 */}
+      {/* A. Background Dust */}
       <points ref={starMeshRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" count={starCount} array={starPositions} itemSize={3} />
@@ -177,19 +171,13 @@ const SceneContent = () => {
         <pointsMaterial size={0.8} color={0xffffff} transparent opacity={0.8} />
       </points>
 
-      {/* B. Constellation Stars - Size reduced from 4 to 2.5 */}
+      {/* B. Constellation Stars */}
       <points ref={connectMeshRef}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" count={connectCount} array={connectPositions} itemSize={3} />
         </bufferGeometry>
         <pointsMaterial size={2.5} color={0x0ea5e9} />
       </points>
-
-      {/* C. Lines (Invisible) */}
-      <lineSegments ref={linesMeshRef}>
-        <bufferGeometry />
-        <lineBasicMaterial color={0x0ea5e9} transparent opacity={0.2} />
-      </lineSegments>
     </>
   );
 };
@@ -204,7 +192,7 @@ const Background = () => {
       height: '100%',
       zIndex: -1,
       transition: 'filter 0.5s ease',
-      backgroundColor: '#000000' // Proper Black
+      backgroundColor: '#000000'
     }}>
       <Canvas
         camera={{ position: [0, 0, 100], fov: 75, near: 0.1, far: 2000 }}
