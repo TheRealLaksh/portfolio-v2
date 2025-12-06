@@ -1,18 +1,17 @@
 import React, { useRef } from 'react';
 import { experienceData } from '../../data/timelineData';
 import { TextReveal } from '../ui/TextReveal';
-import { motion, useScroll, useSpring } from 'framer-motion'; // Updated imports
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { Parallax } from '../ui/Parallax';
 
 const Experience = () => {
   const containerRef = useRef(null);
 
-  // Track scroll progress for the drawing line
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end end"]
   });
 
-  // Smooth out the line drawing animation
   const scaleY = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -20,28 +19,30 @@ const Experience = () => {
   });
 
   return (
-    <section id="experience" ref={containerRef} className="py-20 relative overflow-hidden">
+    <section id="experience" ref={containerRef} className="py-32 relative overflow-hidden">
       
-      {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] -z-10"></div>
+      {/* Ambient Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-32">
           <TextReveal className="flex justify-center">
-             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Expierience</h2>
+             <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+               Mission History
+             </h2>
           </TextReveal>
-          <div className="h-1 w-20 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full"></div>
+          <div className="h-1 w-24 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full"></div>
         </div>
 
-        <div className="relative w-full max-w-5xl mx-auto timeline-container">
+        <div className="relative w-full max-w-6xl mx-auto">
           
-          {/* Animated Vertical Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-zinc-800 md:-translate-x-1/2 ml-5 md:ml-0 overflow-hidden rounded-full">
+          {/* Central Timeline Line */}
+          <div className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-0.5 bg-zinc-800 md:-translate-x-1/2 rounded-full z-0">
             <motion.div 
-              className="w-full bg-gradient-to-b from-sky-500 via-purple-500 to-teal-500 origin-top h-full"
-              style={{ scaleY }} // Framer Motion handles the height/scale automatically
+              className="w-full bg-gradient-to-b from-sky-500 via-purple-500 to-teal-500 origin-top h-full shadow-[0_0_15px_rgba(14,165,233,0.5)]"
+              style={{ scaleY }}
             ></motion.div>
           </div>
 
@@ -50,67 +51,115 @@ const Experience = () => {
             const themeColor = item.theme || 'sky'; 
 
             return (
-              <motion.div 
+              <TimelineItem 
                 key={item.id} 
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="timeline-item relative mb-16 flex flex-col md:flex-row items-center justify-between w-full group"
-              >
-                
-                {!isLeft && <div className="md:w-5/12 order-1 hidden md:block"></div>}
-
-                <div className={`md:w-5/12 w-full pl-14 md:pl-0 ${isLeft ? 'md:pr-10 order-2 md:order-1' : 'md:pl-10 order-2 md:order-3'}`}>
-                  
-                    <div 
-                        className={`bg-zinc-900/60 backdrop-blur-xl p-6 rounded-2xl border border-white/5 transition-all duration-300 hover:bg-zinc-900/90 hover:-translate-y-1 group-hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]
-                        hover:border-${themeColor}-500/30 group-hover:shadow-${themeColor}-500/10`}
-                    >
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-                        <span className={`text-${themeColor}-400 text-xs font-mono border border-${themeColor}-500/20 bg-${themeColor}-500/10 px-3 py-1 rounded-full`}>
-                            {item.date}
-                        </span>
-                        </div>
-
-                        <h3 className="text-2xl font-bold text-white mb-1">{item.title}</h3>
-                        <div className="text-slate-400 text-sm font-medium mb-4 flex items-center gap-2">
-                        <svg className={`w-4 h-4 text-${themeColor}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        {item.company}
-                        </div>
-
-                        <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                        {item.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2">
-                        {item.skills.map((skill, i) => (
-                            <span key={i} className="text-[11px] text-slate-300 bg-slate-800/50 border border-white/5 px-2.5 py-1 rounded-md hover:text-white transition-colors">
-                            {skill}
-                            </span>
-                        ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Center Dot (Pulsing Star) */}
-                <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 flex items-center justify-center ml-0 order-1 z-10 bg-[#050505] rounded-full border-4 border-[#050505]">
-                  <motion.div 
-                    whileInView={{ scale: [1, 1.5, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className={`w-3 h-3 bg-${themeColor}-500 rounded-full shadow-[0_0_10px_currentColor]`}
-                  ></motion.div>
-                </div>
-
-                {isLeft && <div className="md:w-5/12 order-3 hidden md:block"></div>}
-              </motion.div>
+                item={item} 
+                isLeft={isLeft} 
+                themeColor={themeColor} 
+              />
             );
           })}
         </div>
       </div>
     </section>
+  );
+};
+
+// --- Sub-Component for Individual Cards ---
+const TimelineItem = ({ item, isLeft, themeColor }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className={`relative mb-24 flex flex-col md:flex-row items-center justify-between w-full ${
+        isLeft ? 'md:flex-row' : 'md:flex-row-reverse'
+      }`}
+    >
+      
+      {/* 1. Empty Spacer for Layout Balance */}
+      <div className="hidden md:block md:w-5/12" />
+
+      {/* 2. Center Node (The Dot) */}
+      <div className="absolute left-[20px] md:left-1/2 -translate-x-1/2 w-4 h-4 z-20 flex items-center justify-center">
+         <div className={`w-3 h-3 rounded-full bg-[#050505] border-2 border-${themeColor}-500 shadow-[0_0_10px_currentColor] text-${themeColor}-500`}></div>
+      </div>
+
+      {/* 3. The Content Card */}
+      <div className="w-full md:w-5/12 pl-12 md:pl-0 relative group perspective-1000">
+         
+         {/* LASER BEAM CONNECTION */}
+         <motion.div 
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ margin: "-20%" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className={`absolute top-8 h-[2px] bg-${themeColor}-500/50 shadow-[0_0_10px_currentColor] z-0 hidden md:block
+              ${isLeft ? 'right-0 origin-right w-[40px] -mr-[40px]' : 'left-0 origin-left w-[40px] -ml-[40px]'}`}
+         />
+
+         {/* PARALLAX BACKGROUND DATE */}
+         <div className={`absolute top-1/2 -translate-y-1/2 pointer-events-none select-none z-0 
+            ${isLeft ? '-right-20 md:-right-32 text-right' : '-left-20 md:-left-32 text-left'} hidden md:block`}>
+            <Parallax speed={0.1}>
+              <span className="text-8xl font-black text-white/5 font-mono tracking-tighter whitespace-nowrap">
+                {item.bgDate}
+              </span>
+            </Parallax>
+         </div>
+
+         {/* MAIN CARD - FOCUS MODE */}
+         <motion.div
+            initial={{ filter: "brightness(0.5) blur(2px)", scale: 0.95 }}
+            whileInView={{ filter: "brightness(1) blur(0px)", scale: 1 }}
+            viewport={{ margin: "-20% 0px -20% 0px" }} // Focuses when in center
+            transition={{ duration: 0.4 }}
+            className={`relative bg-zinc-900/80 backdrop-blur-xl border border-white/5 p-8 rounded-2xl overflow-hidden
+              hover:border-${themeColor}-500/50 hover:shadow-[0_0_30px_-10px_rgba(var(--${themeColor}-500),0.3)] transition-all duration-300 group-hover:-translate-y-1`}
+         >
+            {/* Holographic Scanline Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-1000 pointer-events-none"></div>
+
+            {/* Header: Date & Role */}
+            <div className="flex flex-col gap-1 mb-4 relative z-10">
+               <div className={`inline-flex items-center gap-2 text-xs font-mono text-${themeColor}-400 mb-2`}>
+                  <span className="w-2 h-2 rounded-full bg-current animate-pulse"></span>
+                  {item.date}
+               </div>
+               <h3 className="text-2xl font-bold text-white">{item.title}</h3>
+               <div className="flex items-center gap-2 text-slate-400 font-medium">
+                  {/* COMPANY LOGO PROJECTION */}
+                  <div className="relative w-6 h-6 rounded overflow-hidden border border-white/10 group-hover:border-${themeColor}-500/50 transition-colors">
+                     <img src={item.logo} alt={item.company} className="w-full h-full object-cover opacity-80 group-hover:opacity-100" />
+                     {/* Glitch Overlay */}
+                     <div className="absolute inset-0 bg-${themeColor}-500 mix-blend-color opacity-0 group-hover:opacity-20"></div>
+                  </div>
+                  <span>{item.company}</span>
+               </div>
+            </div>
+
+            <p className="text-slate-400 text-sm leading-relaxed mb-6 relative z-10">
+               {item.description}
+            </p>
+
+            {/* Tech Stack Pills */}
+            <div className="flex flex-wrap gap-2 relative z-10">
+               {item.skills.map((skill, i) => (
+                  <span key={i} className={`px-3 py-1 text-[10px] font-mono rounded border border-${themeColor}-500/20 bg-${themeColor}-500/5 text-${themeColor}-300`}>
+                     {skill}
+                  </span>
+               ))}
+            </div>
+
+            {/* Decorative Corners */}
+            <div className={`absolute top-0 left-0 w-4 h-4 border-t border-l border-${themeColor}-500/30 rounded-tl-lg`}></div>
+            <div className={`absolute bottom-0 right-0 w-4 h-4 border-b border-r border-${themeColor}-500/30 rounded-br-lg`}></div>
+
+         </motion.div>
+      </div>
+
+    </motion.div>
   );
 };
 
