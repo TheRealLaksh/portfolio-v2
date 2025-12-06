@@ -12,7 +12,7 @@ const TerminalBio = () => {
   const fullText = `const laksh = {
   role: "Full Stack Developer",
   passion: "Building Digital Universes",
-  arsenal: ["React", "Django", "AI/ML"],
+  arsenal: ["CSS", "HTML", "JS", "React", "Node.js", "Python", "Kali-Linux", "AI/ML"],
   mission: "To engineer the future."
 };`;
 
