@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { experienceData } from '../../data/timelineData';
+import { TextReveal } from '../ui/TextReveal'; // Import Animation
 
 const Experience = () => {
   const lineRef = useRef(null);
@@ -15,7 +16,7 @@ const Experience = () => {
         percent = Math.min(Math.max(percent, 0), 1);
         
         // Scale the line
-        lineRef.current.style.transform = `scaleY(${percent * 1.5})`; // 1.5 multiplier to fill faster
+        lineRef.current.style.transform = `scaleY(${percent * 1.5})`; 
       }
     };
 
@@ -32,8 +33,10 @@ const Experience = () => {
       <div className="container mx-auto px-6">
         
         {/* Header */}
-        <div className="text-center mb-24" data-aos="fade-up">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Work Experience</h2>
+        <div className="text-center mb-24">
+          <TextReveal className="flex justify-center">
+             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Work Experience</h2>
+          </TextReveal>
           <div className="h-1 w-20 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full"></div>
         </div>
 
@@ -50,7 +53,7 @@ const Experience = () => {
 
           {experienceData.map((item, index) => {
             const isLeft = index % 2 === 0;
-            const themeColor = item.theme; // 'sky', 'purple', 'teal'
+            const themeColor = item.theme; 
 
             return (
               <div key={item.id} className="timeline-item relative mb-16 flex flex-col md:flex-row items-center justify-between w-full group">
@@ -60,44 +63,46 @@ const Experience = () => {
 
                 {/* Content Card */}
                 <div className={`md:w-5/12 w-full pl-14 md:pl-0 ${isLeft ? 'md:pr-10 order-2 md:order-1' : 'md:pl-10 order-2 md:order-3'}`}>
-                  <div 
-                    className={`bg-zinc-900/60 backdrop-blur-xl p-6 rounded-2xl border border-white/5 transition-all duration-300 hover:bg-zinc-900/90 hover:-translate-y-1 group-hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]
-                    hover:border-${themeColor}-500/30 group-hover:shadow-${themeColor}-500/10`}
-                  >
-                    
-                    {/* Header Row: Date */}
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-                      <span className={`text-${themeColor}-400 text-xs font-mono border border-${themeColor}-500/20 bg-${themeColor}-500/10 px-3 py-1 rounded-full`}>
-                        {item.date}
-                      </span>
-                      <span className="hidden sm:block h-px flex-grow bg-white/5 mx-4"></span>
-                    </div>
-
-                    {/* Title & Company */}
-                    <h3 className="text-2xl font-bold text-white mb-1">{item.title}</h3>
-                    <div className="text-slate-400 text-sm font-medium mb-4 flex items-center gap-2">
-                      {/* Using dynamic color for the icon */}
-                      <svg className={`w-4 h-4 text-${themeColor}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
-                      {item.company}
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                      {item.description}
-                    </p>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2">
-                      {item.skills.map((skill, i) => (
-                        <span key={i} className="text-[11px] text-slate-300 bg-slate-800/50 border border-white/5 px-2.5 py-1 rounded-md hover:text-white transition-colors">
-                          {skill}
+                  
+                  <TextReveal> {/* Wrap card in Reveal */}
+                    <div 
+                        className={`bg-zinc-900/60 backdrop-blur-xl p-6 rounded-2xl border border-white/5 transition-all duration-300 hover:bg-zinc-900/90 hover:-translate-y-1 group-hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]
+                        hover:border-${themeColor}-500/30 group-hover:shadow-${themeColor}-500/10`}
+                    >
+                        
+                        {/* Header Row: Date */}
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                        <span className={`text-${themeColor}-400 text-xs font-mono border border-${themeColor}-500/20 bg-${themeColor}-500/10 px-3 py-1 rounded-full`}>
+                            {item.date}
                         </span>
-                      ))}
-                    </div>
+                        <span className="hidden sm:block h-px flex-grow bg-white/5 mx-4"></span>
+                        </div>
 
-                  </div>
+                        {/* Title & Company */}
+                        <h3 className="text-2xl font-bold text-white mb-1">{item.title}</h3>
+                        <div className="text-slate-400 text-sm font-medium mb-4 flex items-center gap-2">
+                        <svg className={`w-4 h-4 text-${themeColor}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        {item.company}
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                        {item.description}
+                        </p>
+
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2">
+                        {item.skills.map((skill, i) => (
+                            <span key={i} className="text-[11px] text-slate-300 bg-slate-800/50 border border-white/5 px-2.5 py-1 rounded-md hover:text-white transition-colors">
+                            {skill}
+                            </span>
+                        ))}
+                        </div>
+
+                    </div>
+                  </TextReveal>
                 </div>
 
                 {/* Center Node (Dot) */}
