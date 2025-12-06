@@ -4,6 +4,7 @@ import Background from '../3d/Background';
 import Preloader from '../ui/Preloader';
 import Navbar from './Navbar';
 import SocialSidebar from './SocialSidebar';
+import Footer from './Footer'; // Import Footer
 
 const Layout = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,7 @@ const Layout = ({ children }) => {
         <>
           <Navbar />
           <SocialSidebar />
+          
           <motion.main 
             className="relative z-10 flex flex-col items-center w-full"
             initial={{ opacity: 0 }}
@@ -37,6 +39,9 @@ const Layout = ({ children }) => {
           >
             {children}
           </motion.main>
+
+          {/* Footer is now part of the layout flow */}
+          <Footer />
         </>
       )}
     </div>
