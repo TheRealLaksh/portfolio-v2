@@ -12,6 +12,7 @@ import 'aos/dist/aos.css';
 
 function App() {
   useEffect(() => {
+    // Initialize Animate On Scroll
     AOS.init({
       duration: 800,
       easing: 'ease-out-cubic',
@@ -30,7 +31,7 @@ function App() {
       <Resume />
       <Contact /> {/* Added Contact Section */}
       
-      <div className="h-[100px]" /> {/* Smaller spacer before Footer */}
+      <div className="h-[100px]" /> {/* Spacer before Footer */}
     </Layout>
   );
 }

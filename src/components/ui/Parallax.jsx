@@ -8,8 +8,6 @@ export const Parallax = ({ children, speed = 0.5, className = "" }) => {
     offset: ["start end", "end start"],
   });
 
-  // speed > 0: Moves faster than scroll
-  // speed < 0: Moves slower (drags behind)
   const y = useTransform(scrollYProgress, [0, 1], ["0%", `${speed * 100}%`]);
 
   return (

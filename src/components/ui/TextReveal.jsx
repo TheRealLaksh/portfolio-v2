@@ -14,7 +14,7 @@ export const TextReveal = ({ children, className = "" }) => {
         }}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        transition={{ duration: 0.7, ease: [0.33, 1, 0.68, 1] }} // "Quart" easing for premium feel
+        transition={{ duration: 0.8, ease: [0.25, 0.25, 0.25, 0.75] }}
       >
         {children}
       </motion.div>
