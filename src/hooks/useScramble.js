@@ -3,12 +3,26 @@ import { useState, useRef } from 'react';
 const CHARS = "!@#$%^&*():{};|,.<>/?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const CYCLES_PER_LETTER = 2;
 const SHUFFLE_TIME = 50;
+const COOLDOWN_TIME = 5000; // 5 Seconds cooldown
 
 export const useScramble = (text) => {
   const [scrambled, setScrambled] = useState(text);
   const intervalRef = useRef(null);
+  const isOnCooldown = useRef(false); // Track if we are in the 5s waiting period
 
   const scramble = () => {
+    // 1. Check if we are on cooldown. If yes, stop here.
+    if (isOnCooldown.current) return;
+
+    // 2. Activate cooldown
+    isOnCooldown.current = true;
+    
+    // 3. Schedule cooldown removal after 5 seconds
+    setTimeout(() => {
+      isOnCooldown.current = false;
+    }, COOLDOWN_TIME);
+
+    // 4. Run the animation logic (Standard Scramble)
     let pos = 0;
     clearInterval(intervalRef.current);
 
