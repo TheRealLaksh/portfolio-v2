@@ -1,3 +1,4 @@
+// App.jsx
 import React, { useEffect } from 'react';
 import { ReactLenis } from '@studio-freight/react-lenis';
 import Layout from './components/layout/Layout';
@@ -10,6 +11,8 @@ import Resume from './components/sections/Resume';
 import Contact from './components/sections/Contact';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+
+import ChatWidget from './components/chat/ChatWidget';
 
 function App() {
   useEffect(() => {
@@ -33,6 +36,9 @@ function App() {
         <Contact />
         <div className="h-[100px]" />
       </Layout>
+
+      {/* Floating Aurora AI chat in bottom-right */}
+      <ChatWidget />
     </ReactLenis>
   );
 }
