@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 
+const CHARS = "!@#$%^&*():{};|,.<>/?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const CYCLES_PER_LETTER = 2;
 const SHUFFLE_TIME = 50;
-const CHARS = "!@#$%^&*():{};|,.<>/?ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export const useScramble = (text) => {
   const [scrambled, setScrambled] = useState(text);
@@ -30,12 +30,6 @@ export const useScramble = (text) => {
       }
     }, SHUFFLE_TIME);
   };
-
-  // Scramble on mount
-  useEffect(() => {
-    scramble();
-    return () => clearInterval(intervalRef.current);
-  }, [text]);
 
   return { text: scrambled, replay: scramble };
 };

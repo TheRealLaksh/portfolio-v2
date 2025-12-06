@@ -1,7 +1,7 @@
 import React from 'react';
 import profileImg from '../../assets/images/laksh.pradhwani.webp';
-import { TextReveal } from '../ui/TextReveal';
-import { Parallax } from '../ui/Parallax';
+import { TextReveal } from '../ui/TextReveal'; 
+import { Parallax } from '../ui/Parallax';    
 
 const About = () => {
   return (
@@ -10,7 +10,7 @@ const About = () => {
 
         {/* Header with Reveal */}
         <TextReveal className="mb-16 text-center flex justify-center">
-          <h2 className="text-3xl font-bold text-white relative inline-block">
+          <h2 className="section-title text-3xl font-bold text-white relative inline-block">
             About Me
           </h2>
         </TextReveal>
@@ -18,7 +18,7 @@ const About = () => {
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-12 max-w-[1600px] mx-auto">
 
           {/* Left: Image with Parallax */}
-          {/* FIX: Added 'lg:min-h-[500px]' to ensure the image has space to show */}
+          {/* Added 'lg:min-h-[500px]' to ensure visibility */}
           <Parallax speed={-0.05} className="relative w-full lg:w-1/2 h-[400px] sm:h-[500px] lg:min-h-[500px] rounded-2xl overflow-hidden shadow-2xl group order-1">
             <img 
               src={profileImg} 
@@ -42,7 +42,6 @@ const About = () => {
             <div className="relative p-6 sm:p-10 rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-md shadow-xl h-full flex flex-col justify-center">
 
               <div className="text-slate-300 text-lg leading-relaxed space-y-6">
-                
                 <TextReveal>
                   <p>
                     I’m an aspiring <strong className="text-sky-400">AI/ML Engineer</strong> and high
