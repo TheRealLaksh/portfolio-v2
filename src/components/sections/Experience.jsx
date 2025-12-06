@@ -1,25 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 import { experienceData } from '../../data/timelineData';
-import { TextReveal } from '../ui/TextReveal'; // Import Animation
+import { TextReveal } from '../ui/TextReveal'; // For Text (Masked)
+import { Reveal } from '../ui/Reveal';         // For Cards (Fly In)
 
 const Experience = () => {
   const lineRef = useRef(null);
 
-  // Logic to fill the line gradient on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (lineRef.current) {
         const rect = lineRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        // Calculate percentage visible (0 to 1)
         let percent = (windowHeight - rect.top) / (windowHeight + rect.height);
         percent = Math.min(Math.max(percent, 0), 1);
-        
-        // Scale the line
         lineRef.current.style.transform = `scaleY(${percent * 1.5})`; 
       }
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -37,7 +33,9 @@ const Experience = () => {
           <TextReveal className="flex justify-center">
              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Work Experience</h2>
           </TextReveal>
-          <div className="h-1 w-20 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full"></div>
+          <Reveal delay={0.2}>
+            <div className="h-1 w-20 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full"></div>
+          </Reveal>
         </div>
 
         <div className="relative w-full max-w-5xl mx-auto timeline-container">
@@ -58,19 +56,15 @@ const Experience = () => {
             return (
               <div key={item.id} className="timeline-item relative mb-16 flex flex-col md:flex-row items-center justify-between w-full group">
                 
-                {/* Spacer for Right-Aligned Items (Desktop) */}
                 {!isLeft && <div className="md:w-5/12 order-1 hidden md:block"></div>}
 
-                {/* Content Card */}
                 <div className={`md:w-5/12 w-full pl-14 md:pl-0 ${isLeft ? 'md:pr-10 order-2 md:order-1' : 'md:pl-10 order-2 md:order-3'}`}>
-                  
-                  <TextReveal> {/* Wrap card in Reveal */}
+                  {/* FLY IN ANIMATION FOR CARD */}
+                  <Reveal delay={index * 0.2}>
                     <div 
                         className={`bg-zinc-900/60 backdrop-blur-xl p-6 rounded-2xl border border-white/5 transition-all duration-300 hover:bg-zinc-900/90 hover:-translate-y-1 group-hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]
                         hover:border-${themeColor}-500/30 group-hover:shadow-${themeColor}-500/10`}
                     >
-                        
-                        {/* Header Row: Date */}
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
                         <span className={`text-${themeColor}-400 text-xs font-mono border border-${themeColor}-500/20 bg-${themeColor}-500/10 px-3 py-1 rounded-full`}>
                             {item.date}
@@ -78,7 +72,6 @@ const Experience = () => {
                         <span className="hidden sm:block h-px flex-grow bg-white/5 mx-4"></span>
                         </div>
 
-                        {/* Title & Company */}
                         <h3 className="text-2xl font-bold text-white mb-1">{item.title}</h3>
                         <div className="text-slate-400 text-sm font-medium mb-4 flex items-center gap-2">
                         <svg className={`w-4 h-4 text-${themeColor}-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,12 +80,10 @@ const Experience = () => {
                         {item.company}
                         </div>
 
-                        {/* Description */}
                         <p className="text-slate-400 text-sm leading-relaxed mb-6">
                         {item.description}
                         </p>
 
-                        {/* Tags */}
                         <div className="flex flex-wrap gap-2">
                         {item.skills.map((skill, i) => (
                             <span key={i} className="text-[11px] text-slate-300 bg-slate-800/50 border border-white/5 px-2.5 py-1 rounded-md hover:text-white transition-colors">
@@ -100,23 +91,18 @@ const Experience = () => {
                             </span>
                         ))}
                         </div>
-
                     </div>
-                  </TextReveal>
+                  </Reveal>
                 </div>
 
-                {/* Center Node (Dot) */}
                 <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 flex items-center justify-center ml-0 order-1 z-10 bg-[#050505]">
                   <div className={`w-4 h-4 bg-${themeColor}-500 rounded-full ring-4 ring-${themeColor}-500/20 group-hover:scale-125 transition-transform duration-300 shadow-[0_0_15px_currentColor] text-${themeColor}-500`}></div>
                 </div>
 
-                {/* Spacer for Left-Aligned Items (Desktop) */}
                 {isLeft && <div className="md:w-5/12 order-3 hidden md:block"></div>}
-
               </div>
             );
           })}
-
         </div>
       </div>
     </section>

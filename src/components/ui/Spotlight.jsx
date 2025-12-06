@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { motion, useSpring } from 'framer-motion';
 
 const Spotlight = () => {
-  // Smooth physics for the mouse movement
   const springX = useSpring(0, { stiffness: 100, damping: 20 });
   const springY = useSpring(0, { stiffness: 100, damping: 20 });
 

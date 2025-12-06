@@ -23,14 +23,9 @@ const Layout = ({ children }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 2, ease: "easeOut" }}
          >
-            {/* 1. Background Stars */}
             <Background />
-            
-            {/* 2. Mouse Spotlight */}
-            <Spotlight />
-
-            {/* 3. Cinematic Grain Overlay */}
-            <div className="bg-grain"></div>
+            <Spotlight /> {/* Mouse Light */}
+            <div className="bg-grain"></div> {/* Texture */}
          </motion.div>
       )}
 
