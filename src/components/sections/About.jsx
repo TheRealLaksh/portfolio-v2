@@ -18,7 +18,7 @@ const About = () => {
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-12 max-w-[1600px] mx-auto">
 
           {/* Left: Image with Parallax */}
-          {/* Added 'lg:min-h-[500px]' to ensure visibility */}
+          {/* FIXED: Added 'lg:min-h-[500px]' so the absolute image has space to render */}
           <Parallax speed={-0.05} className="relative w-full lg:w-1/2 h-[400px] sm:h-[500px] lg:min-h-[500px] rounded-2xl overflow-hidden shadow-2xl group order-1">
             <img 
               src={profileImg} 

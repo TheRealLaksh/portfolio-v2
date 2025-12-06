@@ -6,7 +6,6 @@ import { Reveal } from '../ui/Reveal';
 const Experience = () => {
   const lineRef = useRef(null);
 
-  // Logic to fill the line gradient on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (lineRef.current) {
@@ -29,7 +28,7 @@ const Experience = () => {
 
       <div className="container mx-auto px-6">
         
-        {/* Header */}
+        {/* Header with Text Reveal */}
         <div className="text-center mb-24">
           <TextReveal className="flex justify-center">
              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Work Experience</h2>
@@ -52,7 +51,7 @@ const Experience = () => {
 
           {experienceData.map((item, index) => {
             const isLeft = index % 2 === 0;
-            const themeColor = item.theme || 'sky'; // Default fallback
+            const themeColor = item.theme || 'sky'; 
 
             return (
               <div key={item.id} className="timeline-item relative mb-16 flex flex-col md:flex-row items-center justify-between w-full group">
@@ -60,6 +59,8 @@ const Experience = () => {
                 {!isLeft && <div className="md:w-5/12 order-1 hidden md:block"></div>}
 
                 <div className={`md:w-5/12 w-full pl-14 md:pl-0 ${isLeft ? 'md:pr-10 order-2 md:order-1' : 'md:pl-10 order-2 md:order-3'}`}>
+                  
+                  {/* Animated Card Fly-In */}
                   <Reveal delay={index * 0.1}>
                     <div 
                         className={`bg-zinc-900/60 backdrop-blur-xl p-6 rounded-2xl border border-white/5 transition-all duration-300 hover:bg-zinc-900/90 hover:-translate-y-1 group-hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]
@@ -95,6 +96,7 @@ const Experience = () => {
                   </Reveal>
                 </div>
 
+                {/* Center Dot (Static) */}
                 <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 flex items-center justify-center ml-0 order-1 z-10 bg-[#050505]">
                   <div className={`w-4 h-4 bg-${themeColor}-500 rounded-full ring-4 ring-${themeColor}-500/20 group-hover:scale-125 transition-transform duration-300 shadow-[0_0_15px_currentColor] text-${themeColor}-500`}></div>
                 </div>
