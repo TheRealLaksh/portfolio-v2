@@ -1,52 +1,48 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { experienceData } from '../../data/timelineData';
 import { TextReveal } from '../ui/TextReveal';
-import { Reveal } from '../ui/Reveal';
+import { motion, useScroll, useSpring } from 'framer-motion'; // Updated imports
 
 const Experience = () => {
-  const lineRef = useRef(null);
+  const containerRef = useRef(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (lineRef.current) {
-        const rect = lineRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        let percent = (windowHeight - rect.top) / (windowHeight + rect.height);
-        percent = Math.min(Math.max(percent, 0), 1);
-        lineRef.current.style.transform = `scaleY(${percent * 1.5})`; 
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Track scroll progress for the drawing line
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end end"]
+  });
+
+  // Smooth out the line drawing animation
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
-    <section id="experience" className="py-20 relative overflow-hidden">
+    <section id="experience" ref={containerRef} className="py-20 relative overflow-hidden">
       
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] -z-10"></div>
 
       <div className="container mx-auto px-6">
         
-        {/* Header with Text Reveal */}
+        {/* Header */}
         <div className="text-center mb-24">
           <TextReveal className="flex justify-center">
-             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Work Experience</h2>
+             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">Expierience</h2>
           </TextReveal>
-          <Reveal delay={0.2}>
-            <div className="h-1 w-20 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full"></div>
-          </Reveal>
+          <div className="h-1 w-20 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full"></div>
         </div>
 
         <div className="relative w-full max-w-5xl mx-auto timeline-container">
           
-          {/* Vertical Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-zinc-800 md:-translate-x-1/2 ml-5 md:ml-0 overflow-hidden">
-            <div 
-              ref={lineRef}
-              className="w-full bg-gradient-to-b from-sky-500 via-purple-500 to-teal-500 origin-top scale-y-0 transition-transform duration-100 ease-out h-full"
-              id="timeline-line-fill"
-            ></div>
+          {/* Animated Vertical Line */}
+          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-zinc-800 md:-translate-x-1/2 ml-5 md:ml-0 overflow-hidden rounded-full">
+            <motion.div 
+              className="w-full bg-gradient-to-b from-sky-500 via-purple-500 to-teal-500 origin-top h-full"
+              style={{ scaleY }} // Framer Motion handles the height/scale automatically
+            ></motion.div>
           </div>
 
           {experienceData.map((item, index) => {
@@ -54,14 +50,19 @@ const Experience = () => {
             const themeColor = item.theme || 'sky'; 
 
             return (
-              <div key={item.id} className="timeline-item relative mb-16 flex flex-col md:flex-row items-center justify-between w-full group">
+              <motion.div 
+                key={item.id} 
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                className="timeline-item relative mb-16 flex flex-col md:flex-row items-center justify-between w-full group"
+              >
                 
                 {!isLeft && <div className="md:w-5/12 order-1 hidden md:block"></div>}
 
                 <div className={`md:w-5/12 w-full pl-14 md:pl-0 ${isLeft ? 'md:pr-10 order-2 md:order-1' : 'md:pl-10 order-2 md:order-3'}`}>
                   
-                  {/* Animated Card Fly-In */}
-                  <Reveal delay={index * 0.1}>
                     <div 
                         className={`bg-zinc-900/60 backdrop-blur-xl p-6 rounded-2xl border border-white/5 transition-all duration-300 hover:bg-zinc-900/90 hover:-translate-y-1 group-hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)]
                         hover:border-${themeColor}-500/30 group-hover:shadow-${themeColor}-500/10`}
@@ -70,7 +71,6 @@ const Experience = () => {
                         <span className={`text-${themeColor}-400 text-xs font-mono border border-${themeColor}-500/20 bg-${themeColor}-500/10 px-3 py-1 rounded-full`}>
                             {item.date}
                         </span>
-                        <span className="hidden sm:block h-px flex-grow bg-white/5 mx-4"></span>
                         </div>
 
                         <h3 className="text-2xl font-bold text-white mb-1">{item.title}</h3>
@@ -93,16 +93,19 @@ const Experience = () => {
                         ))}
                         </div>
                     </div>
-                  </Reveal>
                 </div>
 
-                {/* Center Dot (Static) */}
-                <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 flex items-center justify-center ml-0 order-1 z-10 bg-[#050505]">
-                  <div className={`w-4 h-4 bg-${themeColor}-500 rounded-full ring-4 ring-${themeColor}-500/20 group-hover:scale-125 transition-transform duration-300 shadow-[0_0_15px_currentColor] text-${themeColor}-500`}></div>
+                {/* Center Dot (Pulsing Star) */}
+                <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 flex items-center justify-center ml-0 order-1 z-10 bg-[#050505] rounded-full border-4 border-[#050505]">
+                  <motion.div 
+                    whileInView={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className={`w-3 h-3 bg-${themeColor}-500 rounded-full shadow-[0_0_10px_currentColor]`}
+                  ></motion.div>
                 </div>
 
                 {isLeft && <div className="md:w-5/12 order-3 hidden md:block"></div>}
-              </div>
+              </motion.div>
             );
           })}
         </div>
