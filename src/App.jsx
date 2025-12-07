@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { ReactLenis } from '@studio-freight/react-lenis';
 import Layout from './components/layout/Layout';
-import Hero from './components/sections/Hero';
-import About from './components/sections/About';
-import Experience from './components/sections/Experience';
-import Skills from './components/sections/Skills';
-import Projects from './components/sections/Projects';
-import Resume from './components/sections/Resume';
-import Contact from './components/sections/Contact';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+
+// Updated Imports with Numbered Prefixes
+import Hero from './components/sections/01-Hero';
+import About from './components/sections/02-About';
+import Experience from './components/sections/03-Experience';
+import Skills from './components/sections/04-Skills';
+import Projects from './components/sections/05-Projects';
+import Resume from './components/sections/06-Resume';
+import Contact from './components/sections/07-Contact';
 
 function App() {
   useEffect(() => {

@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { experienceData } from '../../data/timelineData';
 import { TextReveal } from '../ui/TextReveal';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { Parallax } from '../ui/Parallax';
 
 const Experience = () => {
   const containerRef = useRef(null);
@@ -49,9 +50,14 @@ const Experience = () => {
   return (
     <section id="experience" ref={containerRef} className="py-20 relative overflow-hidden">
       
+      {/* Background Number */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+         <Parallax speed={-0.2} className="absolute top-[5%] left-[5%] text-slate-800/50 text-6xl font-bold font-mono opacity-20">02</Parallax>
+      </div>
+
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] -z-10"></div>
 
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 relative z-10">
         
         <div className="text-center mb-16 md:mb-24">
           <TextReveal className="flex justify-center">

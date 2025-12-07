@@ -2,6 +2,7 @@ import React from 'react';
 import Tilt from 'react-parallax-tilt';
 import { TextReveal } from '../ui/TextReveal';
 import { Reveal } from '../ui/Reveal';
+import { Parallax } from '../ui/Parallax';
 import { skillsData } from '../../data/skillsData'; 
 import { triggerHaptic } from '../../utils/triggerHaptic';
 
@@ -26,8 +27,14 @@ const Skills = () => {
   };
 
   return (
-    <section id="skills" className="my-20 md:my-32 relative z-10">
-      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-12">
+    <section id="skills" className="my-20 md:my-32 relative z-10 overflow-hidden">
+      
+      {/* Background Number */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+         <Parallax speed={-0.2} className="absolute top-[5%] left-[5%] text-slate-800/50 text-6xl font-bold font-mono opacity-20">03</Parallax>
+      </div>
+
+      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-12 relative z-10">
 
         <div className="text-center mb-12 md:mb-24">
           <TextReveal className="flex justify-center">

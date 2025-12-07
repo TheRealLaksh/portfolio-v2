@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fi';
 import { TextReveal } from '../ui/TextReveal';
 import { Reveal } from '../ui/Reveal';
+import { Parallax } from '../ui/Parallax';
 import { triggerHaptic } from '../../utils/triggerHaptic';
 
 const GITHUB_USERNAME = 'TheRealLaksh';
@@ -56,9 +57,15 @@ const Projects = () => {
   return (
     <section
       id="projects"
-      className="my-16 sm:my-32 scroll-mt-28 sm:scroll-mt-24 relative z-10"
+      className="my-16 sm:my-32 scroll-mt-28 sm:scroll-mt-24 relative z-10 overflow-hidden"
     >
-      <div className="w-full px-0 md:px-12">
+      
+      {/* Background Number */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+         <Parallax speed={-0.2} className="absolute top-[5%] left-[5%] text-slate-800/50 text-6xl font-bold font-mono opacity-20">04</Parallax>
+      </div>
+
+      <div className="w-full px-0 md:px-12 relative z-10">
         <TextReveal className="mb-8 md:mb-12 px-6">
           <div className="flex items-center justify-between max-w-[1600px] mx-auto">
             <h2 className="text-3xl font-bold text-white">GitHub Shipments</h2>

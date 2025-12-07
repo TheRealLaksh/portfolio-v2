@@ -2,12 +2,19 @@ import React from 'react';
 import resumeFile from '../../assets/resume/laksh.pradhwani.resume.pdf';
 import { TextReveal } from '../ui/TextReveal';
 import { Reveal } from '../ui/Reveal';
+import { Parallax } from '../ui/Parallax';
 import { triggerHaptic } from '../../utils/triggerHaptic';
 
 const Resume = () => {
   return (
-    <section id="resume" className="my-16 sm:my-32 scroll-mt-20 relative z-10">
-      <div className="w-full px-6 md:px-12">
+    <section id="resume" className="my-16 sm:my-32 scroll-mt-20 relative z-10 overflow-hidden">
+      
+      {/* Background Number */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+         <Parallax speed={-0.2} className="absolute top-[5%] left-[5%] text-slate-800/50 text-6xl font-bold font-mono opacity-20">05</Parallax>
+      </div>
+
+      <div className="w-full px-6 md:px-12 relative z-10">
 
         <div className="text-center mb-12">
           <TextReveal className="flex justify-center">
