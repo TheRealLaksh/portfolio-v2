@@ -301,7 +301,7 @@ function ChatWidget() {
                         </span>
                         AI Laksh
                       </div>
-                      <p className="text-[10px] text-slate-400 font-medium ml-4 tracking-wider">ONLINE • v2.0.4</p>
+                      <p className="text-[10px] text-slate-400 font-medium ml-4 tracking-wider">Online and Ready • v2.0.4</p>
                     </div>
                     <div className="flex gap-2">
                       <button onClick={() => setIsExpanded(!isExpanded)} className="text-slate-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors hidden md:block">
