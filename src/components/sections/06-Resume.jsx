@@ -7,11 +7,11 @@ import { triggerHaptic } from '../../utils/triggerHaptic';
 
 const Resume = () => {
   return (
-    <section id="resume" className="my-16 sm:my-32 scroll-mt-20 relative z-10 overflow-hidden">
+    <section id="resume" className="my-16 sm:my-32 scroll-mt-20 relative z-10 overflow-hidden w-full">
       
-      {/* Background Number */}
+      {/* Background Number - Aligned Left-4 */}
       <div className="absolute inset-0 pointer-events-none z-0">
-         <Parallax speed={-0.2} className="absolute top-[5%] left-0 pl-4 text-slate-800/50 text-6xl font-bold font-mono opacity-20">06</Parallax>
+         <Parallax speed={-0.2} className="absolute top-[5%] left-4 text-slate-800/50 text-6xl font-bold font-mono opacity-20">06</Parallax>
       </div>
 
       <div className="w-full px-6 md:px-12 relative z-10">
