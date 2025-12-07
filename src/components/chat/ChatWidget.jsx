@@ -11,7 +11,7 @@ import { cn } from '../../utils/cn';
 
 // API Configuration
 const API_URL = '/api/chat';
-const API_KEY = 'oqLZh!P`U61f,m4iV?l556.N&O`A%%h';
+const API_KEY = 'mySuperSecretPassword123';
 
 // --- COMPONENTS ---
 
