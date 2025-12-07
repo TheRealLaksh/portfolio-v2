@@ -9,7 +9,7 @@ import useGitHub from '../../hooks/useGitHub';
 import profileImg from '../../assets/images/laksh.pradhwani.webp';
 import resumeFile from '../../assets/resume/laksh.pradhwani.resume.pdf';
 import { skillsData } from '../../data/skillsData';
-import { experienceData } from '../../data/timelineData'; // Import Experience Data
+import { experienceData } from '../../data/timelineData'; // Ensure this data file exists and exports experienceData
 
 // --- 1. CONTACT CARD ---
 export const ContactCard = () => {
@@ -150,25 +150,25 @@ export const ProjectCard = () => {
   );
 };
 
-// --- 3. EXPERIENCE / ROLE CARD (Updated) ---
+// --- 3. EXPERIENCE / ROLE CARD (FIXED) ---
 export const ExperienceCard = () => (
   <div className="flex gap-4 overflow-x-auto pb-4 max-w-[85vw] md:max-w-[500px] snap-x custom-scrollbar">
      {experienceData.map((item) => (
        <div key={item.id} className="min-w-[280px] snap-center bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
-          <div className={`absolute top-0 right-0 p-3 opacity-10 text-${item.theme}-500`}><FiBriefcase size={80} /></div>
+          <div className={`absolute top-0 right-0 p-3 opacity-10 text-${item.theme || 'sky'}-500`}><FiBriefcase size={80} /></div>
           
           <div className="relative z-10 flex-1">
              <div className="flex justify-between items-start mb-3">
                 <div className="w-12 h-12 rounded-xl bg-white p-1 flex items-center justify-center">
                    <img src={item.logo} alt={item.company} className="w-full h-full object-contain" />
                 </div>
-                <span className={`text-[10px] font-mono border border-${item.theme}-500/30 bg-${item.theme}-500/10 text-${item.theme}-400 px-2 py-1 rounded-full`}>
+                <span className={`text-[10px] font-mono border border-${item.theme || 'sky'}-500/30 bg-${item.theme || 'sky'}-500/10 text-${item.theme || 'sky'}-400 px-2 py-1 rounded-full`}>
                    {item.date}
                 </span>
              </div>
 
              <h4 className="text-white font-bold text-lg leading-tight mb-0.5">{item.title}</h4>
-             <p className={`text-${item.theme}-400 text-xs font-medium mb-3`}>{item.company}</p>
+             <p className={`text-${item.theme || 'sky'}-400 text-xs font-medium mb-3`}>{item.company}</p>
              
              <div className="h-[1px] w-full bg-white/10 mb-3"></div>
              
