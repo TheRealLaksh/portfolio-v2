@@ -81,7 +81,7 @@ const About = () => {
     <section id="about" className="my-20 sm:my-32 relative z-10 overflow-hidden">
       
       <div className="absolute inset-0 pointer-events-none z-0">
-         <Parallax speed={-0.2} className="absolute top-[10%] left-[5%] text-slate-800/50 text-6xl font-bold font-mono opacity-20">01</Parallax>
+         <Parallax speed={-0.2} className="absolute top-[10%] left-0 pl-4 text-slate-800/50 text-6xl font-bold font-mono opacity-20">02</Parallax>
          <Parallax speed={0.1} className="absolute top-[20%] right-[10%] text-sky-900/20 text-8xl font-black opacity-10">{'}'}</Parallax>
       </div>
 

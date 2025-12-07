@@ -52,7 +52,7 @@ const Experience = () => {
       
       {/* Background Number */}
       <div className="absolute inset-0 pointer-events-none z-0">
-         <Parallax speed={-0.2} className="absolute top-[5%] left-[5%] text-slate-800/50 text-6xl font-bold font-mono opacity-20">02</Parallax>
+         <Parallax speed={-0.2} className="absolute top-[5%] left-0 pl-4 text-slate-800/50 text-6xl font-bold font-mono opacity-20">03</Parallax>
       </div>
 
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] -z-10"></div>

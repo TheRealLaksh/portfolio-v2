@@ -31,7 +31,7 @@ const Skills = () => {
       
       {/* Background Number */}
       <div className="absolute inset-0 pointer-events-none z-0">
-         <Parallax speed={-0.2} className="absolute top-[5%] left-[5%] text-slate-800/50 text-6xl font-bold font-mono opacity-20">03</Parallax>
+         <Parallax speed={-0.2} className="absolute top-[5%] left-0 pl-4 text-slate-800/50 text-6xl font-bold font-mono opacity-20">04</Parallax>
       </div>
 
       <div className="w-full max-w-[1600px] mx-auto px-4 md:px-12 relative z-10">

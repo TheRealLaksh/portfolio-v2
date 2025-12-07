@@ -43,10 +43,15 @@ const Hero = () => {
 
   return (
     <section ref={containerRef} id="home" className="min-h-[100dvh] flex flex-col justify-center relative z-10 px-4 sm:px-0 perspective-[1200px] overflow-hidden pt-10 pb-20 md:pt-0 md:pb-0">
+      
+      {/* Background Number */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+         <Parallax speed={-0.2} className="absolute top-[10%] left-0 pl-4 text-slate-800/50 text-6xl font-bold font-mono opacity-20">01</Parallax>
+      </div>
 
       <motion.div
         style={{ rotateX, opacity, scale, y }}
-        className="w-full max-w-4xl mx-auto text-center origin-center"
+        className="w-full max-w-4xl mx-auto text-center origin-center relative z-10"
       >
         <TextReveal className="mb-4 md:mb-6 flex justify-center">
           <h2 className="text-xl md:text-3xl lg:text-5xl font-bold text-slate-400">
