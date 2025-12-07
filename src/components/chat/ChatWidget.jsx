@@ -12,8 +12,8 @@ import { cn } from '../../utils/cn';
 // API Configuration
 const API_URL = import.meta.env.DEV 
   ? '/api/chat' 
-  : 'https://ai-backend.lakshp.live/api/chat';
-const API_KEY = 'mySuperSecretPassword123';
+  : 'https://ai-backend-2.vercel.app/api/chat';
+const API_KEY = 'AI-Laksh123';
 
 // --- COMPONENTS ---
 
