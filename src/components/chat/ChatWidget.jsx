@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { 
   FiMessageSquare, FiX, FiSend, FiCopy, FiExternalLink, 
-  FiBriefcase, FiMinimize2, FiMaximize2, FiMail
+  FiBriefcase, FiMinimize2, FiMaximize2, FiMail // <--- ADDED FiMail HERE
 } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import resumeFile from '../../assets/resume/laksh.pradhwani.resume.pdf'; 
@@ -46,7 +46,7 @@ const ActionChip = ({ icon: Icon, label, onClick }) => (
   </button>
 );
 
-// --- NEW SUB-COMPONENT: CONTACT CARD ---
+// --- CONTACT CARD COMPONENT ---
 const ContactCard = () => {
   const handleCopy = () => {
     navigator.clipboard.writeText('contact@lakshp.live');
@@ -202,13 +202,11 @@ function ChatWidget() {
   };
 
   const handleCopyEmail = () => {
-    // 1. User Message (Fake it for better UX)
     setChatMessages(prev => [
       ...prev, 
       { sender: 'You', content: 'Can I get your contact info?', type: 'text' }
     ]);
     
-    // 2. Bot Response with Card
     setTimeout(() => {
       triggerHaptic();
       setChatMessages(prev => [
@@ -229,7 +227,6 @@ function ChatWidget() {
     const message = input.trim();
     if (!message || isLoading) return;
     
-    // 1. Add User Message
     setInput('');
     setChatMessages((prev) => [...prev, { sender: 'You', content: message, type: 'text' }]);
     setIsLoading(true);
@@ -244,27 +241,23 @@ function ChatWidget() {
       if (!response.ok) throw new Error('Failed');
       const data = await response.json();
       
-      // --- SMART LOGIC START ---
       let aiReply = typeof data?.reply === 'string' ? data.reply : String(data?.reply ?? '');
       let showCard = false;
 
-      // Check for the secret tag
+      // Smart Logic: Detect the secret tag from backend
       if (aiReply.includes('[SHOW_CONTACT_CARD]')) {
         showCard = true;
-        aiReply = aiReply.replace('[SHOW_CONTACT_CARD]', ''); // Remove tag
+        aiReply = aiReply.replace('[SHOW_CONTACT_CARD]', '');
       }
 
-      // Add text reply first
       setChatMessages((prev) => [...prev, { sender: 'Aurora', content: aiReply, type: 'mdx' }]);
 
-      // Trigger card if needed
       if (showCard) {
         setTimeout(() => {
             triggerHaptic();
             setChatMessages((prev) => [...prev, { sender: 'Aurora', type: 'contact' }]);
         }, 600);
       }
-      // --- SMART LOGIC END ---
 
     } catch {
       setChatMessages((prev) => [...prev, { sender: 'Aurora', content: 'Error. Please try again.', type: 'text' }]);
@@ -393,7 +386,6 @@ function ChatWidget() {
                     </div>
                   </div>
 
-                  {/* Messages */}
                   <div className="flex-1 overflow-y-auto px-5 py-5 space-y-5 custom-scrollbar" onWheel={(e) => { e.stopPropagation(); }}>
                     {chatMessages.length === 0 && (
                       <div className="h-full flex flex-col items-center justify-center text-center p-6">
@@ -413,7 +405,6 @@ function ChatWidget() {
                     )}
                     {chatMessages.map((msg, i) => (
                       <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`flex ${msg.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-                        {/* --- RENDER CARD OR TEXT --- */}
                         {msg.type === 'contact' ? (
                             <ContactCard />
                         ) : (
