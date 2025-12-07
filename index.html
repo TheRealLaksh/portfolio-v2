@@ -1,26 +1,46 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0ea5e9" />
-    <meta name="description" content="Laksh Pradhwani - Full Stack Developer & Aspiring AI/ML Engineer" />
-    <link rel="manifest" href="/manifest.json" />
-    <title>Laksh Pradhwani | Web Dev Portfolio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('SW Registered'))
-            .catch(err => console.log('SW Fail', err));
-        });
-      }
-    </script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="description" content="Laksh Pradhwani - Full Stack Developer & Aspiring AI/ML Engineer" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>Laksh Pradhwani | Web Dev Portfolio</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Adding ?v=2 forces the browser to check for updates to the SW file
+        navigator.serviceWorker.register('/sw.js?v=2')
+          .then(reg => {
+            console.log('SW Registered');
+
+            // Optional: Check for updates immediately
+            reg.onupdatefound = () => {
+              const installingWorker = reg.installing;
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed') {
+                  if (navigator.serviceWorker.controller) {
+                    console.log('New content is available; please refresh.');
+                  } else {
+                    console.log('Content is cached for offline use.');
+                  }
+                }
+              };
+            };
+          })
+          .catch(err => console.log('SW Fail', err));
+      });
+    }
+  </script>
+</body>
+
 </html>
