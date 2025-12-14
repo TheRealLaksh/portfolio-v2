@@ -43,13 +43,13 @@ const Resume = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={triggerHaptic}
-              className="group relative w-full max-w-xs cursor-pointer overflow-hidden rounded-full border border-slate-700 bg-slate-900/50 p-3 text-center font-semibold shadow-lg transition-all duration-300 hover:border-emerald-500/50 hover:shadow-emerald-500/20 active:scale-95"
+              className="group relative w-56 cursor-pointer overflow-hidden rounded-full border border-slate-700 bg-slate-900/50 p-3 text-center font-semibold shadow-lg transition-all duration-300 hover:border-purple-500/50 hover:shadow-purple-500/20 active:scale-95"
             >
               <span className="inline-block transition-all duration-300 group-hover:translate-x-12 group-hover:opacity-0 text-slate-300">
                 Resume
               </span>
 
-              <div className="absolute left-5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-emerald-600 transition-all duration-500 group-hover:-top-24 group-hover:-left-16 group-hover:h-72 group-hover:w-72 group-hover:translate-y-0"></div>
+              <div className="absolute left-5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-purple-600 transition-all duration-500 group-hover:-top-24 group-hover:-left-16 group-hover:h-72 group-hover:w-72 group-hover:translate-y-0"></div>
 
               <div className="absolute inset-0 z-10 flex items-center justify-center gap-2 opacity-0 transition-all duration-300 group-hover:opacity-100 text-white">
                 <span>Resume</span>
@@ -64,8 +64,8 @@ const Resume = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                  <circle cx="12" cy="12" r="3" />
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
                 </svg>
               </div>
             </a>
