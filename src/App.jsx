@@ -21,6 +21,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // Scroll to top on route change
     window.scrollTo(0, 0);
     AOS.refresh(); 
   }, [location]);
@@ -36,16 +37,15 @@ function App() {
     <ReactLenis root options={lenisOptions}>
       <Layout>
         <Routes>
-          {/* Main Home Page */}
+       
           <Route path="/" element={<Home />} />
 
-          {/* Booking Page */}
+     
           <Route path="/booking" element={<Booking />} />
           
-          {/* Handle plural 'bookings' - Redirects to /booking */}
+         
           <Route path="/bookings" element={<Navigate to="/booking" replace />} />
-          
-          {/* Catch-all - Redirects random URLs back to Home */}
+
           <Route path="*" element={<Navigate to="/" replace />} />
           
         </Routes>
