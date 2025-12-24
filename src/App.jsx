@@ -37,13 +37,8 @@ function App() {
     <ReactLenis root options={lenisOptions}>
       <Layout>
         <Routes>
-       
           <Route path="/" element={<Home />} />
-
-     
           <Route path="/booking" element={<Booking />} />
-          
-         
           <Route path="/bookings" element={<Navigate to="/booking" replace />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
