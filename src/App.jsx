@@ -1,28 +1,27 @@
 import React, { useEffect } from 'react';
 import { ReactLenis } from '@studio-freight/react-lenis';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-import Hero from './components/sections/01-Hero';
-import About from './components/sections/02-About';
-import Experience from './components/sections/03-Experience';
-import Skills from './components/sections/04-Skills';
-import Projects from './components/sections/05-Projects';
-import Resume from './components/sections/06-Resume';
-import Services from './components/sections/07-Services';
+// Import the new pages
+import Home from './pages/Home';
 import Booking from './components/sections/Booking';
-import Contact from './components/sections/08-Contact';
 
 function App() {
+  const location = useLocation();
+
   useEffect(() => {
+    // Re-initialize AOS on route change to animate elements on the new page
     AOS.init({
       duration: 800,
       easing: 'ease-out-cubic',
       once: true,
       offset: 30,
     });
-  }, []);
+    AOS.refresh();
+  }, [location.pathname]); // Run whenever the path changes
 
   const lenisOptions = {
     lerp: 0.07,
@@ -34,16 +33,10 @@ function App() {
   return (
     <ReactLenis root options={lenisOptions}>
       <Layout>
-        <Hero />
-        <About />
-        <Experience />
-        <Skills />
-        <Projects />
-        <Resume />
-        <Services />
-        <Booking />
-        <Contact />
-        <div className="h-[100px]" />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/booking" element={<Booking />} />
+        </Routes>
       </Layout>
     </ReactLenis>
   );

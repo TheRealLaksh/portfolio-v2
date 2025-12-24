@@ -238,11 +238,13 @@ const Booking = () => {
 
   // --- Main Render ---
   return (
-    <section id="booking" className="my-16 sm:my-32 relative z-10 w-full scroll-mt-20">
+    // FIX: Changed "my-16 sm:my-32" to "pt-32 pb-20 min-h-screen" to ensure full page height and spacing from navbar
+    <section id="booking" className="pt-32 pb-20 min-h-screen relative z-10 w-full">
       
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <Parallax speed={-0.2} className="absolute top-0 right-10 text-slate-800/30 text-[8rem] font-bold font-mono opacity-20">
+        {/* FIX: Changed top-0 to top-20 to ensure text isn't cut off by navbar */}
+        <Parallax speed={-0.2} className="absolute top-20 right-10 text-slate-800/30 text-[8rem] font-bold font-mono opacity-20">
           BOOK
         </Parallax>
       </div>
