@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { ReactLenis } from '@studio-freight/react-lenis';
-// 1. Import 'Navigate'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import AOS from 'aos';
@@ -37,11 +36,16 @@ function App() {
     <ReactLenis root options={lenisOptions}>
       <Layout>
         <Routes>
+          {/* Main Home Page */}
           <Route path="/" element={<Home />} />
+
+          {/* Booking Page */}
           <Route path="/booking" element={<Booking />} />
           
-          {/* 2. ADD THIS CATCH-ALL ROUTE */}
-          {/* If the URL doesn't match above, redirect to Home */}
+          {/* Handle plural 'bookings' - Redirects to /booking */}
+          <Route path="/bookings" element={<Navigate to="/booking" replace />} />
+          
+          {/* Catch-all - Redirects random URLs back to Home */}
           <Route path="*" element={<Navigate to="/" replace />} />
           
         </Routes>
